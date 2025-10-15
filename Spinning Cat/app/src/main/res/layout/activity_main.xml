@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/intro"
         android:layout_width="316dp"
         android:layout_height="68dp"
         android:text="@string/intro"
@@ -46,7 +46,7 @@
         app:layout_constraintVertical_bias="0.745" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/retUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/returningUser"
@@ -72,7 +72,7 @@
         app:layout_constraintVertical_bias="0.562" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/newUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/newUser"
@@ -96,7 +96,7 @@
         app:srcCompat="@drawable/oiia_cat" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/TOS_PP"
         android:layout_width="368dp"
         android:layout_height="45dp"
         android:text="@string/policy"

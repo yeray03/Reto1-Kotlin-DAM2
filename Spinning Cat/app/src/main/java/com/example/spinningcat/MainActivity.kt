@@ -23,5 +23,8 @@ class MainActivity : AppCompatActivity() {
             .asGif()
             .load(R.drawable.oiia_cat) // Reemplaza con el nombre de tu archivo GIF en drawable
             .into(imageViewGif)
+
+        @Suppress("DEPRECATION")
+        window.navigationBarColor = getColor(R.color.bgColor) // Cambia el color de la barra de navegación
     }
 }

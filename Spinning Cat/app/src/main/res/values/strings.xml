@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Spinning Cat</string>
+    <string name="intro">No ads, intuitive, offline/online modes\nwith lots of free features and... cats?</string>
+    <string name="info">Welcome to Spinning Cat, your free workout app where you can track your training and see guides of each training made by... cats?</string>
+    <string name="policy">By proceeding you confirm that you have read and agreed to Spinning Cat"'"s Terms of Service and Privacy Policy.</string>
+    <string name="newUser">New User:</string>
+    <string name="joinApp">Join Spinning Cat</string>
+    <string name="returningUser">Returning User:</string>
+    <string name="login">Login Here</string>
 </resources>

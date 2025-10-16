@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 
-class LanguageAdapter(
+class SpinnerAdapter(
     context: Context,
     private val flags: List<Int>
 ) : ArrayAdapter<Int>(context, R.layout.layout_spinner, flags) {

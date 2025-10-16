@@ -38,11 +38,10 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor =
             getColor(R.color.bgColor) // Cambia el color de la barra de navegación
 
-        // the TextView from the layout file
+        // el textview donde se muestra el TOS y PP
         val textView = findViewById<TextView>(R.id.TOS_PP)
 
-        // Finding and displaying the content
-        // that consists a URL as a hyperlink
+        // Habilitar los enlaces en el TextView
         textView.movementMethod = LinkMovementMethod.getInstance()
 
         findViewById<Button>(R.id.btnRegister).setOnClickListener {
@@ -50,12 +49,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+
+        // Spinner (menu desplegable) personalizado para seleccionar el idioma
         val flags = listOf(
             R.drawable.icono_espanita_foreground,
             R.drawable.icono_inglish_pitinglish_foreground
         )
         val spinner = findViewById<Spinner>(R.id.idiomas)
-        spinner.adapter = LanguageAdapter(this, flags)
+        spinner.adapter = SpinnerAdapter(this, flags)
 
         @Suppress("DEPRECATION")
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -77,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // No action needed
+                // Nada
             }
         }
     }

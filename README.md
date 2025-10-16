@@ -4,7 +4,7 @@
 
 ## 🏋️‍♂️ **¿Qué es esta App?**
 
-La app móvil de **GymElorrieta** permite a los usuarios llevar el control de sus entrenamientos y su progreso directamente desde el teléfono.  
+La app móvil de **Spinning Cat** permite a los usuarios llevar el control de sus entrenamientos y su progreso directamente desde el teléfono.  
 Además, los entrenadores pueden gestionar y personalizar workouts para cada usuario.
 
 ---
@@ -46,7 +46,7 @@ Además, los entrenadores pueden gestionar y personalizar workouts para cada usu
 ## 🆘 **Soporte**
 
 ¿Tienes dudas o problemas?  
-Contacta al equipo técnico en [soporte@gymelorrieta.com](mailto:soporte@gymelorrieta.com)
+Contacta al equipo técnico en [soporte@spinningcat.com](mailto:soporte@spinningcat.com)
 
 ---
 

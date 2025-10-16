@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Spinning Cat</string>
+    <string name="intro">Sin anuncios, intuitiva, modos offline/online\ncon muchas funciones gratis y… ¿gatos?</string>
+    <string name="info">Bienvenido a Spinning Cat, tu app gratuita de entrenamiento donde puedes registrar tus rutinas y ver guías de cada ejercicio</string>
+    <string name="policy">Al continuar confirmas que has leído y aceptado los <a href="http://141.253.193.187/politicas/Policies.html">Términos de Servicio</a> y la <a href="http://141.253.193.187/politicas/Policies.html">Política de Privacidad</a> de Spinning Cat.</string>
+    <string name="newUser">Nuevo usuario:</string>
+    <string name="joinApp">Únete a Spinning Cat</string>
+    <string name="returningUser">Usuario recurrente:</string>
+    <string name="login">Iniciar sesión aquí</string>
+</resources>

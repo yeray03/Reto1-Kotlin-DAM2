@@ -31,10 +31,12 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Cambia la foto del imageview por el gif del gatete
         val imageViewGif = findViewById<ImageView>(R.id.imageViewGif)
         Glide.with(this)
             .asGif()
-            .load(R.drawable.oiia_cat) // Reemplaza con el nombre de tu archivo GIF en drawable
+            .load(R.drawable.oiia_cat)
             .into(imageViewGif)
 
         @Suppress("DEPRECATION")

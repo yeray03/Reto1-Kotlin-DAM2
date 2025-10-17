@@ -16,4 +16,5 @@
     <string name="tvDate">Fecha de nacimiento:</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
+    <string name="login2">Iniciar sesión</string>
 </resources>

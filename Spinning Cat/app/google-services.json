@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "97166039037",
+    "firebase_url": "https://spinningcat-cac21-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "spinningcat-cac21",
+    "storage_bucket": "spinningcat-cac21.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97166039037:android:67ed7df05216d9ba7beb94",
+        "android_client_info": {
+          "package_name": "com.example.spinningcat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPIUj85U07vGPGZTdsxhTf1cYSza28bRM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

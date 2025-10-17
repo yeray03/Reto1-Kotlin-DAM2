@@ -20,4 +20,6 @@
     <string name="remember_me">Remember me</string>
     <string name="client">Client</string>
     <string name="trainer">Trainer</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
 </resources>

@@ -17,7 +17,7 @@ import android.widget.AdapterView
 import java.util.Locale
 import androidx.core.content.edit
 import com.example.spinningcat.activities.Register
-import com.example.spinningcat.activities.SpinnerAdapter
+import com.example.spinningcat.adapter.SpinnerAdapter
 import com.example.spinningcat.activities.Login
 
 class MainActivity : AppCompatActivity() {

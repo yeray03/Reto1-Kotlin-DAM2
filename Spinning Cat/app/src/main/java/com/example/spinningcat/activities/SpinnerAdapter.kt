@@ -1,4 +1,4 @@
-package com.example.spinningcat
+package com.example.spinningcat.activities
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import com.example.spinningcat.R
 
 class SpinnerAdapter(
     context: Context,

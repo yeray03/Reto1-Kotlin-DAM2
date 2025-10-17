@@ -16,6 +16,9 @@ import android.widget.Spinner
 import android.widget.AdapterView
 import java.util.Locale
 import androidx.core.content.edit
+import com.example.spinningcat.activities.Register
+import com.example.spinningcat.activities.SpinnerAdapter
+import com.example.spinningcat.activities.Login
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,20 +47,26 @@ class MainActivity : AppCompatActivity() {
         // Habilitar los enlaces en el TextView
         textView.movementMethod = LinkMovementMethod.getInstance()
 
+        // Botón para ir a la pantalla de Registro
         findViewById<Button>(R.id.btnRegister).setOnClickListener {
             val intent = Intent(applicationContext, Register::class.java)
             startActivity(intent)
-            finish()
+        }
+
+        // Botón para ir a la pantalla de Login
+        findViewById<Button>(R.id.btnLogin).setOnClickListener {
+            val intent = Intent(applicationContext, Login::class.java)
+            startActivity(intent)
         }
 
 
         // Spinner (menu desplegable) personalizado para seleccionar el idioma
-        val flags = listOf(
+        val idiomas = listOf(
             R.drawable.icono_espanita_foreground,
             R.drawable.icono_inglish_pitinglish_foreground
         )
         val spinner = findViewById<Spinner>(R.id.idiomas)
-        spinner.adapter = SpinnerAdapter(this, flags)
+         spinner.adapter = SpinnerAdapter(this, idiomas)
 
         @Suppress("DEPRECATION")
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -79,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada
+                // no hace nada pero es necesario para el override
             }
         }
     }

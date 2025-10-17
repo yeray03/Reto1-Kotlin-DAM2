@@ -8,4 +8,12 @@
     <string name="joinApp">Join Spinning Cat</string>
     <string name="returningUser">Returning User:</string>
     <string name="login">Login Here</string>
+    <string name="tvName">Name:</string>
+    <string name="tvSurnames">Surnames:</string>
+    <string name="tvEmail">Email:</string>
+    <string name="tvPassword">Password:</string>
+    <string name="tvConfirmPassword">Confirm Password:</string>
+    <string name="tvDate">Birthdate:</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

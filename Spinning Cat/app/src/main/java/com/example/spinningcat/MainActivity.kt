@@ -61,6 +61,12 @@ class MainActivity : AppCompatActivity() {
 
 
         // Spinner (menu desplegable) personalizado para seleccionar el idioma
+        // NO PREGUNTAR NUNCA COMO FUNCIONA PORQUE NO LO SE
+        // FUNCIONA GRACIAS A LA FÉ, LA SUERTE Y ALGUNAS DE MIS LAGRIMAS
+        // SI LO ENTIENDES NO FUNCIONA Y SI FUNCIONA NO LO ENTIENDES
+        // EDITAR BAJO TU PROPIO RIESGO
+        // NO ME HAGO RESPONSABLE DE FUTUROS CRASHEOS SI SE EDITA
+        // Fdo.: Yery :)
         val idiomas = listOf(
             R.drawable.icono_espanita_foreground,
             R.drawable.icono_inglish_pitinglish_foreground

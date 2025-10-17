@@ -17,4 +17,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="login2">Login</string>
+    <string name="remember_me">Remember me</string>
+    <string name="client">Client</string>
+    <string name="trainer">Trainer</string>
 </resources>

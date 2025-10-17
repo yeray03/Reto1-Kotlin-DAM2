@@ -17,4 +17,7 @@
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
     <string name="login2">Iniciar sesión</string>
+    <string name="remember_me">Recuerdame</string>
+    <string name="client">Cliente</string>
+    <string name="trainer">Entrenador</string>
 </resources>

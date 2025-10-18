@@ -28,6 +28,13 @@
     <string name="register">Registrar Usuario</string>
     <string name="welcome">Bienvenido, %1$s</string>
     <string name="userNotFound">El usuario no existe</string>
+    <string name="userFound">El usuario ya existe</string>
     <string name="invalidPasswd">La contraseña es incorrecta</string>
-    <string name="emailExists">Error: El correo electrónico ya está registrado.</string>
+    <string name="emailExists">El correo electrónico ya está registrado</string>
+    <string name="fill">Rellene todos los campos</string>
+    <string name="unmatch">Las contraseñas no coinciden</string>
+    <string name="accountCreated">Cuenta creada con éxito</string>
+    <string name="accountCreationError">Error al crear la cuenta</string>
+    <string name="dbError">Error al acceder a la base de datos</string>
+    <string name="usersError">Error al obtener los usuarios</string>
 </resources>

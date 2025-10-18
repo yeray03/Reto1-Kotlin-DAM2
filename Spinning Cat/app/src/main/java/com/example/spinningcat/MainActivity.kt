@@ -69,12 +69,16 @@ class MainActivity : AppCompatActivity() {
         // EDITAR BAJO TU PROPIO RIESGO
         // NO ME HAGO RESPONSABLE DE FUTUROS CRASHEOS SI SE EDITA
         // Fdo.: Yery :)
+
+        val idiomaMovil = Locale.getDefault().language
         val idiomas = listOf(
-            R.drawable.icono_espanita_foreground,
-            R.drawable.icono_inglish_pitinglish_foreground
+            R.drawable.icono_espanita_foreground, // posicion 0
+            R.drawable.icono_inglish_pitinglish_foreground // posicion 1
         )
+        val initialPos = if (idiomaMovil == "es") 0 else 1
         val spinner = findViewById<Spinner>(R.id.idiomas)
          spinner.adapter = SpinnerAdapter(this, idiomas)
+        spinner.setSelection(initialPos)
 
         @Suppress("DEPRECATION")
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -96,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // no hace nada pero es necesario para el override
+                // no hace nada pero es necesario para el override de arriba
             }
         }
     }
@@ -104,7 +108,7 @@ class MainActivity : AppCompatActivity() {
     // para cerrar la main activity desde otra actividad
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (intent?.getBooleanExtra("finish_main", false) == true) {
+        if (intent.getBooleanExtra("finish_main", false) == true) {
             finish()
         }
     }

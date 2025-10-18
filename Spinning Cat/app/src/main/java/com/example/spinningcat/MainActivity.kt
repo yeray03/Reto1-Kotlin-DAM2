@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor =
             getColor(R.color.bgColor) // Cambia el color de la barra de navegación
 
-        // el textview donde se muestra el TOS y PP
+        // el textview donde se muestra el TOS y PP (Terms of Service y Privacy Policy)
         val textView = findViewById<TextView>(R.id.TOS_PP)
 
         // Habilitar los enlaces en el TextView
@@ -98,6 +98,14 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // no hace nada pero es necesario para el override
             }
+        }
+    }
+
+    // para cerrar la main activity desde otra actividad
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent?.getBooleanExtra("finish_main", false) == true) {
+            finish()
         }
     }
 }

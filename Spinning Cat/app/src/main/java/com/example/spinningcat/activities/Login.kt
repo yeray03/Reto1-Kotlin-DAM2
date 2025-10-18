@@ -1,22 +1,20 @@
 package com.example.spinningcat.activities
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.spinningcat.MainActivity
 import com.example.spinningcat.R
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 
 class Login : AppCompatActivity() {
-    private val db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,15 +25,37 @@ class Login : AppCompatActivity() {
             insets
         }
 
-        findViewById<Button>(R.id.btnLogin_Login).setOnClickListener{
+        findViewById<Button>(R.id.btnLogin_Login).setOnClickListener {
             val user: String = findViewById<EditText>(R.id.txtNameLogin).text.toString()
             val passwd: String = findViewById<EditText>(R.id.txtPasswdLogin).text.toString()
-            if (user == "admin" && passwd == "1234"){
+            if (user == "admin" && passwd == "1234") {
                 Toast.makeText(applicationContext, "Login correcto", Toast.LENGTH_SHORT).show()
-            }
-            else Toast.makeText(applicationContext,"Login incorrecto",Toast.LENGTH_SHORT).show()
+
+                // Cerrar la MainActivity para que no quede en la pila de actividades
+                val cerrarMain = Intent(applicationContext, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    putExtra("finish_main", true)
+                }
+                startActivity(cerrarMain)
+
+                // Ir a la actividad de Client
+                val intent = Intent(
+                    applicationContext,
+                    Client::class.java
+                )
+                startActivity(intent)
+                finish()
+            } else Toast.makeText(applicationContext, "Login incorrecto", Toast.LENGTH_SHORT).show()
         }
 
+        findViewById<TextView>(R.id.gotoRegister).setOnClickListener {
+            val intent = Intent(
+                applicationContext,
+                Register::class.java
+            )
+            startActivity(intent)
+            finish()
+        }
 
 
     }

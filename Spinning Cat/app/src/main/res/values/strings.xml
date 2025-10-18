@@ -16,10 +16,14 @@
     <string name="tvDate">Birthdate:</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="login2">Login</string>
+    <string name="login2">Log in</string>
     <string name="remember_me">Remember me</string>
     <string name="client">Client</string>
     <string name="trainer">Trainer</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
+    <string name="gotoRegister"><a href="">You don"'"t have an account yet?</a></string>
+    <string name="userRegistration">Register New User:</string>
+    <string name="alreadyAccount"><a href="">Already have an account? Log in</a></string>
+    <string name="register">Register User</string>
 </resources>

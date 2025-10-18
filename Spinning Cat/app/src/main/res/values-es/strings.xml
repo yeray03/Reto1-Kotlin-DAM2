@@ -22,4 +22,8 @@
     <string name="trainer">Entrenador</string>
     <string name="name">nombre</string>
     <string name="email">correo</string>
+    <string name="gotoRegister"><a href="">¿Aún no tienes una cuenta?</a></string>
+    <string name="userRegistration">Registrar nuevo usuario:</string>
+    <string name="alreadyAccount"><a href="">¿Ya tienes una cuenta? Inicia sesión</a></string>
+    <string name="register">Registrar Usuario</string>
 </resources>

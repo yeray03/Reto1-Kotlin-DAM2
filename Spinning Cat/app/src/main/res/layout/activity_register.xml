@@ -23,9 +23,9 @@
             tools:layout_editor_absoluteY="-11dp">
 
             <TextView
-                android:id="@+id/Register"
-                android:layout_width="159dp"
-                android:layout_height="31dp"
+                android:id="@+id/TvRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
                 android:text="@string/register"
                 android:textAlignment="center"

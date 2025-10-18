@@ -26,4 +26,8 @@
     <string name="userRegistration">Register New User:</string>
     <string name="alreadyAccount"><a href="">Already have an account? Log in</a></string>
     <string name="register">Register User</string>
+    <string name="welcome">Welcome, %1$s</string>
+    <string name="userNotFound">User does not exist</string>
+    <string name="invalidPasswd">Password is incorrect</string>
+    <string name="emailExists">Error: Email is already registered.</string>
 </resources>

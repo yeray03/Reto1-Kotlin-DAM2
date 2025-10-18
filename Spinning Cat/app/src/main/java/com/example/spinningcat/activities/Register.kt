@@ -35,6 +35,9 @@ class Register : AppCompatActivity() {
 //                TODO("Not yet implemented")
 //                // generar fichero para ofline y crear cuenta en firebase
 //            }
+
+            val intent = Intent(applicationContext, Login::class.java)
+            startActivity(intent)
             finish()
             Toast.makeText(applicationContext, "Cuenta creada con exito", Toast.LENGTH_SHORT).show()
         }

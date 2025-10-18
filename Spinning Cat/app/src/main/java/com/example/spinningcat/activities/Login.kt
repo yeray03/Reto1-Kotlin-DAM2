@@ -13,8 +13,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.spinningcat.MainActivity
 import com.example.spinningcat.R
-import com.google.firebase.firestore.FirebaseFirestore
 import com.example.spinningcat.adapter.User
+import com.google.firebase.firestore.FirebaseFirestore
 
 class Login : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()     //firestore instance
@@ -29,7 +29,7 @@ class Login : AppCompatActivity() {
             insets
         }
 
-
+        // Lista para almacenar los usuarios obtenidos de Firestore
         val userList = mutableListOf<User>()
 
         // Obtener todos los usuarios de la colección "usuarios"
@@ -40,13 +40,6 @@ class Login : AppCompatActivity() {
                 user.id = document.id // Asignar el ID del documento al campo id del usuario
                 userList.add(user) // Agregar el usuario a la lista
             }
-            Toast.makeText(
-                applicationContext,
-                "Usuarios obtenidos correctamente",
-                Toast.LENGTH_SHORT
-            ).show()
-
-
         }
             // Manejar errores al obtener los usuarios
             .addOnFailureListener { exception ->
@@ -60,15 +53,24 @@ class Login : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.btnLogin_Login).setOnClickListener {
+            var existe = false
             val user: String = findViewById<EditText>(R.id.txtNameLogin).text.toString()
             val passwd: String = findViewById<EditText>(R.id.txtPasswdLogin).text.toString()
+
+            if (user.isBlank()) { // campo usuario vacío
+                Toast.makeText(applicationContext, "El usuario no existe", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
             // Verificar el login
             for (u in userList) {
-
-                if (user == u.email && passwd == u.contraseña) {
-                    Toast.makeText(applicationContext, "Login correcto", Toast.LENGTH_SHORT)
+                if (user.equals(u.email, ignoreCase = true) && passwd == u.contraseña) {
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.welcome, u.nombre),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
-
                     // Cerrar la MainActivity para que no quede en la pila de actividades
                     val cerrarMain = Intent(applicationContext, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -84,24 +86,23 @@ class Login : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                     return@setOnClickListener // return de toda la vida pero con pijadas de kotlin
-
+                }
+                if (user.equals(u.email, ignoreCase = true)) {
+                    existe = true
                 }
             }
-            Toast.makeText(applicationContext, "Login incorrecto", Toast.LENGTH_SHORT).show()
-
-
-
-
-            findViewById<TextView>(R.id.gotoRegister).setOnClickListener {
-                val intent = Intent(
-                    applicationContext,
-                    Register::class.java
-                )
-                startActivity(intent)
-                finish()
+            if (existe) { // usuario existe pero contraseña incorrecta
+                Toast.makeText(applicationContext, "Contraseña incorrecta", Toast.LENGTH_SHORT)
+                    .show()
             }
-
-
+        }
+        findViewById<TextView>(R.id.gotoRegister).setOnClickListener {
+            val intent = Intent(
+                applicationContext,
+                Register::class.java
+            )
+            startActivity(intent)
+            finish()
         }
     }
 }

@@ -77,6 +77,7 @@ class Register : AppCompatActivity() {
         val apellidos = findViewById<TextView>(R.id.txtSurnames).text.toString()
         val contrasena = findViewById<TextView>(R.id.txtPasswd).text.toString()
         val contrasena2 = findViewById<TextView>(R.id.txtConfirmPasswd).text.toString()
+        // Validacion de que las contraseñas coincidan
         if (contrasena != contrasena2) {
             Toast.makeText(
                 applicationContext,
@@ -109,7 +110,7 @@ class Register : AppCompatActivity() {
         }
         val nivel = 0
 
-
+        // Objeto UserAdapter con los datos del nuevo usuario (incluyendo el ID)
         val usuario = UserAdapter(
             id,
             nombre,
@@ -119,6 +120,18 @@ class Register : AppCompatActivity() {
             fechaNac,
             tipousuario,
             nivel
+        )
+
+        // Crear un HashMap para enviar los datos a la BBDD (sin el ID)
+        val userHashMap = hashMapOf(
+            "nombre" to usuario.nombre,
+            "apellidos" to usuario.apellidos,
+            "contrasena" to usuario.contrasena,
+            "email" to usuario.email,
+            "historico" to usuario.historico,
+            "fechaNac" to usuario.fechaNacimiento,
+            "tipousuario" to usuario.tipoUsuario,
+            "nivel" to usuario.nivel
         )
 
         db.collection("usuarios").get()
@@ -140,7 +153,7 @@ class Register : AppCompatActivity() {
                         .show()
                     return@addOnSuccessListener
                 } else {
-                    db.collection("usuarios").document(id).set(usuario)
+                    db.collection("usuarios").document(id).set(userHashMap)
                         .addOnSuccessListener {
                             Toast.makeText(
                                 applicationContext,

@@ -1,8 +1,10 @@
 package com.example.spinningcat.activities
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -14,8 +16,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.spinningcat.R
 import com.example.spinningcat.adapter.UserAdapter
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.system.exitProcess
-import kotlin.text.set
+import java.util.Calendar
+import java.util.Locale
 
 
 class Register : AppCompatActivity() {
@@ -29,6 +31,23 @@ class Register : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val txtDate = findViewById<EditText>(R.id.txtDate)
+
+        // Mostrar datePicker al tocar el campo de la fecha
+        txtDate.setOnClickListener {
+
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+            val datePicker = DatePickerDialog(this, { _, selYear, selMonth, selDay ->
+                val dateFormat = String.format(Locale.getDefault(),"%02d/%02d/%04d", selDay, selMonth + 1, selYear) // Formatear la fecha como DD/MM/YYYY
+                txtDate.setText(dateFormat)
+            }, year, month, day)
+            datePicker.datePicker.maxDate = System.currentTimeMillis()
+            datePicker.show()
+        }
 
         findViewById<TextView>(R.id.alreadyAcc).setOnClickListener {
             val intent = Intent(applicationContext, Login::class.java)
@@ -39,8 +58,7 @@ class Register : AppCompatActivity() {
         findViewById<Button>(R.id.btnConfirm).setOnClickListener {
             crearCuenta()
 
-            // generar fichero para ofline y crear cuenta en firebase
-
+            // generar fichero para ofline (aun no implementado)
 
         }
 
@@ -67,7 +85,7 @@ class Register : AppCompatActivity() {
             ).show()
             return
         }
-        val email = findViewById<TextView>(R.id.txtMail).text.toString()
+        val email = id
         val fechaNac = findViewById<TextView>(R.id.txtDate).text.toString()
         val opcionMarcada = findViewById<RadioGroup>(R.id.Rgroup).checkedRadioButtonId
         // Validar que todos los campos estén completos
@@ -83,7 +101,7 @@ class Register : AppCompatActivity() {
         }
 
         val radioUsuario = findViewById<RadioButton>(opcionMarcada).text.toString()
-        var tipousuario = -1
+        var tipousuario: Int
         if (radioUsuario == "Trainee" || radioUsuario == "Cliente") { // hardcodeado porque con strings.xml solo pilla el idioma del sistema y no valida los dos idiomas
             tipousuario = 0
         } else {

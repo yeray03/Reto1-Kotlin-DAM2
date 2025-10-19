@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
     // para cerrar la main activity desde otra actividad
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (intent.getBooleanExtra("finish_main", false) == true) {
+        if (intent.getBooleanExtra("finish_main", false)) {
             finish()
         }
     }

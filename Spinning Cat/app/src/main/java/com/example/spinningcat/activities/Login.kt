@@ -34,10 +34,8 @@ class Login : AppCompatActivity() {
         // Obtener todos los usuarios de la colección "usuarios"
         db.collection("usuarios").get().addOnSuccessListener { result ->
             for (document in result) {
-                val userAdapter =
-                    document.toObject(UserAdapter::class.java) // Convertir el documento a un objeto User/Trainee
-                userAdapter.id =
-                    document.id // Asignar el ID del documento al campo id del usuario
+                val userAdapter = document.toObject(UserAdapter::class.java) // Convertir el documento a un objeto User
+                //userAdapter.email = document.id // Asignar el ID del documento al campo id del usuario
                 userAdapterList.add(userAdapter) // Agregar el usuario a la lista
             }
         }
@@ -114,6 +112,7 @@ class Login : AppCompatActivity() {
             finish()
         }
     }
+
     fun cerrarMainActivity() {
         // Cerrar la MainActivity para que no quede en la pila de actividades
         val cerrarMain = Intent(applicationContext, MainActivity::class.java).apply {

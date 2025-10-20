@@ -1,7 +1,6 @@
 package com.example.spinningcat.adapter
 
 data class UserAdapter(
-    var id: String = "",
     var nombre: String = "",
     var apellidos: String = "",
     var contrasena: String = "",

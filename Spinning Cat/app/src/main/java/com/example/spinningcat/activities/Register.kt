@@ -72,7 +72,7 @@ class Register : AppCompatActivity() {
     }
 
     fun crearCuenta() {
-        val id = findViewById<TextView>(R.id.txtMail).text.toString()
+//        val id = findViewById<TextView>(R.id.txtMail).text.toString()
         val nombre = findViewById<TextView>(R.id.txtName).text.toString()
         val apellidos = findViewById<TextView>(R.id.txtSurnames).text.toString()
         val contrasena = findViewById<TextView>(R.id.txtPasswd).text.toString()
@@ -86,12 +86,12 @@ class Register : AppCompatActivity() {
             ).show()
             return
         }
-        val email = id
+        val email = findViewById<TextView>(R.id.txtMail).text.toString()
         val fechaNac = findViewById<TextView>(R.id.txtDate).text.toString()
         val opcionMarcada = findViewById<RadioGroup>(R.id.Rgroup).checkedRadioButtonId
         // Validar que todos los campos estén completos
-        if (id.isBlank() || nombre.isBlank() || apellidos.isBlank() ||
-            contrasena.isBlank() || contrasena2.isBlank() || fechaNac.isBlank() || opcionMarcada == -1
+        if (nombre.isBlank() || apellidos.isBlank() ||
+            contrasena.isBlank() || contrasena2.isBlank() || email.isBlank() || fechaNac.isBlank() || opcionMarcada == -1
         ) {
             Toast.makeText(
                 applicationContext,
@@ -110,9 +110,8 @@ class Register : AppCompatActivity() {
         }
         val nivel = 0
 
-        // Objeto UserAdapter con los datos del nuevo usuario (incluyendo el ID)
+        // Objeto UserAdapter con los datos del nuevo usuario
         val usuario = UserAdapter(
-            id,
             nombre,
             apellidos,
             contrasena,
@@ -122,24 +121,11 @@ class Register : AppCompatActivity() {
             nivel
         )
 
-        // Crear un HashMap para enviar los datos a la BBDD (sin el ID)
-        val userHashMap = hashMapOf(
-            "nombre" to usuario.nombre,
-            "apellidos" to usuario.apellidos,
-            "contrasena" to usuario.contrasena,
-            "email" to usuario.email,
-            "historico" to usuario.historico,
-            "fechaNac" to usuario.fechaNacimiento,
-            "tipousuario" to usuario.tipoUsuario,
-            "nivel" to usuario.nivel
-        )
-
         db.collection("usuarios").get()
             .addOnSuccessListener { result ->
                 var existe = false
                 for (document in result) {
-                    val user = document.toObject(UserAdapter::class.java)
-                    if (user.id.equals(usuario.id, ignoreCase = true)) {
+                    if (document.id.equals(usuario.email, ignoreCase = true)) {
                         existe = true
                         break
                     }
@@ -153,7 +139,7 @@ class Register : AppCompatActivity() {
                         .show()
                     return@addOnSuccessListener
                 } else {
-                    db.collection("usuarios").document(id).set(userHashMap)
+                    db.collection("usuarios").document(usuario.email).set(usuario)
                         .addOnSuccessListener {
                             Toast.makeText(
                                 applicationContext,

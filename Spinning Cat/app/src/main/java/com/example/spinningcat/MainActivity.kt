@@ -16,9 +16,14 @@ import android.widget.Spinner
 import android.widget.AdapterView
 import java.util.Locale
 import androidx.core.content.edit
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.spinningcat.activities.Register
 import com.example.spinningcat.adapter.SpinnerAdapter
 import com.example.spinningcat.activities.Login
+import com.example.spinningcat.room.entity.UserEntity
 
 class MainActivity : AppCompatActivity() {
 
@@ -113,4 +118,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-    
+
+@Dao
+interface UsuarioRememberDao {
+    @Query("SELECT * FROM usuario_remember WHERE id = 0")
+    suspend fun getRememberedUser(): UserEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveUser(user: UserEntity)
+
+    @Query("DELETE FROM usuario_remember")
+    suspend fun clearRememberedUser()
+}

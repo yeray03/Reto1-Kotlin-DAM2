@@ -1,6 +1,9 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    // alias(libs.plugins.android.application)
+    // alias(libs.plugins.kotlin.android)
+    id ("com.android.application")
+    id ("org.jetbrains.kotlin.android")
+    id ("kotlin-kapt")
     id("com.google.gms.google-services")
 }
 
@@ -49,16 +52,22 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
 
     //Firestore KTX (para kotlin)
     implementation("com.google.firebase:firebase-firestore-ktx")
-    // When using the BoM, you don't specify versions in Firebase library dependencies
 
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation("com.google.firebase:firebase-analytics")
 
+    // Add the dependency for Firebase Authentication (room)
+    implementation("androidx.room:room-runtime:2.5.2")
 
+    // KAPT para Room
+    kapt("androidx.room:room-compiler:2.5.2")
 
+    // Room KTX para funciones de extensión de Kotlin
+    implementation("androidx.room:room-ktx:2.5.2")
 }

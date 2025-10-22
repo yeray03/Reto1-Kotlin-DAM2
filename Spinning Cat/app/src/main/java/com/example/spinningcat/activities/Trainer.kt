@@ -1,21 +1,145 @@
 package com.example.spinningcat.activities
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spinningcat.R
+import com.example.spinningcat.adapter.TrainerWorkoutAdapter
+import com.example.spinningcat.model.Workout
+import com.google.firebase.firestore.FirebaseFirestore
 
 class Trainer : AppCompatActivity() {
+
+    private var adapter: TrainerWorkoutAdapter? = null
+    private var workouts: MutableList<Workout> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_trainer)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        // Referencias a vistas
+        val recyclerWorkouts = findViewById<RecyclerView>(R.id.recyclerWorkouts)
+        val btnAddWorkout = findViewById<Button>(R.id.btnFilter2)
+        val btnCancel = findViewById<Button>(R.id.btnCancel)
+        val editTextFilter = findViewById<EditText>(R.id.editTextFilter)
+        val btnFilter = findViewById<Button>(R.id.btnFilter)
+
+        // Adapter
+        adapter = TrainerWorkoutAdapter(
+            workouts,
+            onModificar = { workout -> modificarWorkout(workout) },
+            onEliminar = { workout -> eliminarWorkout(workout) },
+            onReproducir = { url -> reproducirVideo(url) }
+        )
+        recyclerWorkouts.layoutManager = LinearLayoutManager(this)
+        recyclerWorkouts.adapter = adapter
+
+        // Cargar workouts de Firestore al iniciar
+        cargarWorkouts()
+
+        // Añadir workout
+        btnAddWorkout.setOnClickListener {
+            // Ejemplo de añadir uno rápido
+            val nuevo = Workout(
+                id = System.currentTimeMillis().toString(),
+                nombre = "Workout molón",
+                descripcion = "Cardio al fallo",
+                nivel = 0,
+                videoUrl = null
+            )
+            guardarWorkoutEnFirestore(nuevo)
         }
+
+        // Filtrar workouts
+        btnFilter.setOnClickListener {
+            val filtro = editTextFilter.text.toString().trim()
+            if (filtro.isEmpty()) {
+                adapter?.setWorkouts(workouts)
+            } else {
+                val filtrados = workouts.filter {
+                    it.nombre.contains(filtro, ignoreCase = true) ||
+                            it.nivel.toString() == filtro
+                }
+                adapter?.setWorkouts(filtrados)
+            }
+        }
+
+        // Volver
+        btnCancel.setOnClickListener {
+            finish()
+        }
+    }
+
+    // Carga todos los workouts desde Firestore
+    private fun cargarWorkouts() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("workouts").get().addOnSuccessListener { result ->
+            workouts.clear()
+            for (doc in result) {
+                val workout = doc.toObject(Workout::class.java)
+                // Asegúrate de que el id se guarda también
+                workout.id = doc.id
+                workouts.add(workout)
+            }
+            adapter?.setWorkouts(workouts)
+        }.addOnFailureListener {
+            Toast.makeText(this, "Error al cargar workouts", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Guardar un nuevo workout en Firestore
+    private fun guardarWorkoutEnFirestore(workout: Workout) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("workouts").document(workout.id).set(workout)
+            .addOnSuccessListener {
+                workouts.add(workout)
+                adapter?.addWorkout(workout)
+                Toast.makeText(this, "Workout añadido", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error al añadir workout", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // Modificar un workout (debes implementar un diálogo para editarlo y luego actualizar Firestore)
+    private fun modificarWorkout(workout: Workout) {
+        // Aquí deberías mostrar un diálogo de edición
+        // Por simplicidad, se cambia solo el nombre (puedes expandirlo)
+        workout.nombre = "Modificado"
+        val db = FirebaseFirestore.getInstance()
+        db.collection("workouts").document(workout.id).set(workout)
+            .addOnSuccessListener {
+                adapter?.updateWorkout(workout)
+                Toast.makeText(this, "Workout modificado", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error al modificar", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // Eliminar un workout
+    private fun eliminarWorkout(workout: Workout) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("workouts").document(workout.id).delete()
+            .addOnSuccessListener {
+                workouts.remove(workout)
+                adapter?.removeWorkout(workout)
+                Toast.makeText(this, "Workout eliminado", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error al eliminar", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // Reproducir vídeo
+    private fun reproducirVideo(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 }

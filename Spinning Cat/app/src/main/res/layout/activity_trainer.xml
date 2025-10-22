@@ -5,13 +5,153 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".activities.Trainer">
 
+    <!-- Logo del gimnasio -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="130dp"
+        android:layout_height="52dp"
+        android:src="@drawable/logo01"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Botón de perfil/usuario -->
+    <ImageView
+        android:id="@+id/imageViewProfile"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/icono_cuenta"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Título "Entrenador" -->
+
+    <!-- Campo para filtrar workouts -->
+
+    <!-- Botón filtrar -->
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewTrainerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="trainer"
-        tools:layout_editor_absoluteX="97dp"
-        tools:layout_editor_absoluteY="77dp" />
+        android:text="Entrenador"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="99dp"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/editTextFilter"
+        android:layout_width="232dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_input"
+        android:hint="Filtrar por nivel"
+        android:inputType="text"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintEnd_toStartOf="@id/btnFilter"
+        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="149dp"
+        tools:ignore="MissingConstraints" />
+
+    <!-- Texto "Lista de Workouts:" -->
+    <Button
+        android:id="@+id/btnFilter"
+        android:layout_width="112dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/teal_700"
+        android:text="Filtrar"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="142dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btnFilter2"
+        android:layout_width="128dp"
+        android:layout_height="59dp"
+        android:layout_marginEnd="140dp"
+        android:backgroundTint="#101010"
+        android:text="Añadir Workout"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="577dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textViewWorkoutList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lista de Workouts:"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/editTextFilter"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="24dp"/>
+
+    <!-- Botón Añadir workout -->
+    <TextView
+        android:id="@+id/textViewWorkoutList2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="Lista de Workouts:"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="201dp"
+        tools:ignore="MissingConstraints" />
+
+    <!-- RecyclerView para la lista de workouts -->
+
+    <!-- Botón Volver -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerWorkouts"
+        android:layout_width="364dp"
+        android:layout_height="311dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginEnd="16dp"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_workout_trainer" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Volver"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/gray"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="24dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

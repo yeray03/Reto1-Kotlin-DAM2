@@ -1,7 +1,9 @@
 package com.example.spinningcat.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -16,45 +18,32 @@ import androidx.room.Room
 import com.example.spinningcat.MainActivity
 import com.example.spinningcat.R
 import com.example.spinningcat.adapter.UserAdapter
-import com.example.spinningcat.data.AppDatabase
-import com.example.spinningcat.room.entity.UserEntity
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import androidx.lifecycle.lifecycleScope
 
 class Login : AppCompatActivity() {
     private val dbFirestore = FirebaseFirestore.getInstance() //firestore instance
-    private lateinit var appDb: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
-        // Inicializa Room (solo una vez por aplicación, aquí está bien)
-        appDb = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "app-db"
-        ).allowMainThreadQueries() // para estudiante: así puedes probar en main thread si es necesario, aunque lo ideal es usar corrutinas
-            .build()
-
         val txtUser = findViewById<EditText>(R.id.txtNameLogin)
         val txtPass = findViewById<EditText>(R.id.txtPasswdLogin)
         val chkRemember = findViewById<CheckBox>(R.id.rememberMe)
 
-        // Recuperar usuario recordado y rellenar el formulario si existe (Room siempre desde corrutina)
-        lifecycleScope.launch {
-            val remembered = appDb.usuarioRememberDao().getRememberedUser()
-            if (remembered?.checked == true) {
-                txtUser.setText(remembered.user)
-                txtPass.setText(remembered.pass)
-                chkRemember.isChecked = true
-            } else {
-                txtUser.setText("")
-                txtPass.setText("")
-                chkRemember.isChecked = false
-            }
-        }
+      /*  lifecycleScope.launch (Dispatchers.IO) {
+            val db = AppDatabase(this as Context)
+
+            Log.d("Adapter", "Updating adapter with ${NewUserEntity.size} UserEntity") // log: muestra por consola para hacer pruebas de las tablas
+            UserEntity = NewUserEntity
+
+
+        }*/
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -102,7 +91,7 @@ class Login : AppCompatActivity() {
                     ).show()
 
                     // Guardar o limpiar datos de RememberMe usando Room
-                    lifecycleScope.launch {
+                /*    lifecycleScope.launch {
                         if (chkRemember.isChecked) {
                             appDb.usuarioRememberDao().saveUser(
                                 UserEntity(
@@ -115,7 +104,9 @@ class Login : AppCompatActivity() {
                         } else {
                             appDb.usuarioRememberDao().clearRememberedUser()
                         }
-                    }
+                    }*/
+
+
                     if (u.tipoUsuario == 0) { //trainee
                         // Ir a la actividad de Client
                         val intent = Intent(
@@ -151,7 +142,7 @@ class Login : AppCompatActivity() {
         }
 
         // Listener para el checkbox (opcional: limpia si se desmarca)
-        chkRemember.setOnCheckedChangeListener { _, isChecked ->
+       /* chkRemember.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked) {
                 txtUser.setText("")
                 txtPass.setText("")
@@ -160,7 +151,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-
+*/
         findViewById<TextView>(R.id.gotoRegister).setOnClickListener {
             val intent = Intent(
                 applicationContext,

@@ -23,7 +23,6 @@ import androidx.room.Query
 import com.example.spinningcat.activities.Register
 import com.example.spinningcat.adapter.SpinnerAdapter
 import com.example.spinningcat.activities.Login
-import com.example.spinningcat.room.entity.UserEntity
 
 class MainActivity : AppCompatActivity() {
 
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, Login::class.java)
             startActivity(intent)
         }
-
 
         // Spinner (menu desplegable) personalizado para seleccionar el idioma
         // NO PREGUNTAR NUNCA COMO FUNCIONA PORQUE NO LO SE
@@ -117,16 +115,4 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-}
-
-@Dao
-interface UsuarioRememberDao {
-    @Query("SELECT * FROM usuario_remember WHERE id = 0")
-    suspend fun getRememberedUser(): UserEntity?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveUser(user: UserEntity)
-
-    @Query("DELETE FROM usuario_remember")
-    suspend fun clearRememberedUser()
 }

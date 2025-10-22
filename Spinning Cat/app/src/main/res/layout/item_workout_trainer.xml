@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Nombre del Workout -->
+        <TextView
+            android:id="@+id/txtNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre del Workout"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#222"/>
+
+        <!-- Descripción -->
+        <TextView
+            android:id="@+id/txtDescripcion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción breve del workout"
+            android:textSize="14sp"
+            android:textColor="#444"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Nivel -->
+        <TextView
+            android:id="@+id/txtNivel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nivel: 0"
+            android:textSize="14sp"
+            android:textColor="#666"
+            android:layout_marginTop="2dp"/>
+
+        <!-- Vídeo (opcional, solo texto URL o un icono de video) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+            <ImageView
+                android:id="@+id/imgVideo"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Vídeo"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/txtVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver vídeo"
+                android:textSize="14sp"
+                android:textColor="@color/teal_700"
+                android:layout_marginStart="4dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <!-- Botones de acción -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnModificar"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Modificar"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/teal_700"
+                android:textColor="#FFF"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnEliminar"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Eliminar"
+                android:textAllCaps="false"
+                android:textColor="#FFF"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

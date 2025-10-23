@@ -29,7 +29,7 @@
             android:id="@+id/txtDescripcion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Descripción breve del workout"
+            android:text="Descripción del workout"
             android:textSize="14sp"
             android:textColor="#444"
             android:layout_marginTop="4dp"/>

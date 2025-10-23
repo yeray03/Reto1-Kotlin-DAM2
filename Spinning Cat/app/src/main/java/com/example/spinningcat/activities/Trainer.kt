@@ -13,6 +13,8 @@ import com.example.spinningcat.R
 import com.example.spinningcat.adapter.TrainerWorkoutAdapter
 import com.example.spinningcat.model.Workout
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.text.set
+import kotlin.toString
 
 class Trainer : AppCompatActivity() {
 
@@ -27,8 +29,8 @@ class Trainer : AppCompatActivity() {
         val recyclerWorkouts = findViewById<RecyclerView>(R.id.recyclerWorkouts)
         val btnAddWorkout = findViewById<Button>(R.id.btnFilter2)
         val btnCancel = findViewById<Button>(R.id.btnCancel)
-        val editTextFilter = findViewById<EditText>(R.id.editTextFilter)
-        val btnFilter = findViewById<Button>(R.id.btnFilter)
+        val editTextNumber = findViewById<EditText>(R.id.editTextNumber)
+        val btnFilter = findViewById<Button>(R.id.btnFiltrar)
 
         // Adapter
         adapter = TrainerWorkoutAdapter(
@@ -56,8 +58,8 @@ class Trainer : AppCompatActivity() {
             guardarWorkoutEnFirestore(nuevo)
         }
 
-        // Filtrar workouts
-        btnFilter.setOnClickListener {
+        // Filtrar workouts, por nivel fijo (1)
+   /*     btnFilter.setOnClickListener {
             val filtro = editTextFilter.text.toString().trim()
             if (filtro.isEmpty()) {
                 adapter?.setWorkouts(workouts)
@@ -68,7 +70,19 @@ class Trainer : AppCompatActivity() {
                 }
                 adapter?.setWorkouts(filtrados)
             }
+        }*/
+        btnFilter.setOnClickListener {
+            val nivelStr = findViewById<EditText>(R.id.editTextNumber).text.toString().trim()
+            val nivel = nivelStr.toIntOrNull()
+            if (nivel != null) {
+                val filtrados = workouts.filter { it.nivel == nivel }
+                adapter?.setWorkouts(filtrados)
+            } else {
+                adapter?.setWorkouts(workouts)
+                Toast.makeText(this, "Introduce un nivel válido", Toast.LENGTH_SHORT).show()
+            }
         }
+
 
         // Volver
         btnCancel.setOnClickListener {
@@ -98,14 +112,14 @@ class Trainer : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         db.collection("workouts").document(workout.id).set(workout)
             .addOnSuccessListener {
-                workouts.add(workout)
-                adapter?.addWorkout(workout)
+                cargarWorkouts() // Recarga la lista completa desde Firestore
                 Toast.makeText(this, "Workout añadido", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Error al añadir workout", Toast.LENGTH_SHORT).show()
             }
     }
+
 
     // Modificar un workout (debes implementar un diálogo para editarlo y luego actualizar Firestore)
     private fun modificarWorkout(workout: Workout) {

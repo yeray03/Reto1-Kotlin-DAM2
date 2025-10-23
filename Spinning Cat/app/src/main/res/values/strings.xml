@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Spinning Cat</string>
     <string name="intro">No ads, intuitive, offline/online modes\nwith lots of free features and… cats?</string>
     <string name="info">Welcome to Spinning Cat, your free workout app where you can track your training and see guides of each training</string>
@@ -16,6 +16,7 @@
     <string name="tvDate">Birthdate:</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="filtrar" tools:ignore="MissingTranslation">Filtrar</string>
     <string name="login2">Log in</string>
     <string name="remember_me">Remember me</string>
     <string name="client">Client</string>
@@ -37,4 +38,7 @@
     <string name="accountCreationError">Error creating account</string>
     <string name="dbError">Error accessing database</string>
     <string name="usersError">Error retrieving users</string>
+    <string name="filter_by_level">Filter by level</string>
+    <string name="goback">Return</string>
+
 </resources>

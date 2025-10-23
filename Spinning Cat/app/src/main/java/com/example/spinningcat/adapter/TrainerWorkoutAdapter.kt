@@ -13,7 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spinningcat.R
-import com.example.spinningcat.model.Workout
+import com.example.spinningcat.room.entities.Workout
 
 class TrainerWorkoutAdapter(
     private var workouts: MutableList<Workout>,

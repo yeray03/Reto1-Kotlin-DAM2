@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spinningcat.R
 import com.example.spinningcat.adapter.TrainerWorkoutAdapter
-import com.example.spinningcat.model.Workout
+import com.example.spinningcat.room.entities.Workout
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Trainer : AppCompatActivity() {
@@ -48,6 +48,7 @@ class Trainer : AppCompatActivity() {
         btnAddWorkout.setOnClickListener {
             // Ejemplo de añadir uno rápido
             val nuevo = Workout(
+
                 nombre = "WorkoutMolon",
                 descripcion = "Cardio al fallo",
                 nivel = 0,
@@ -111,7 +112,6 @@ class Trainer : AppCompatActivity() {
     // Guardar un nuevo workout en Firestore
     private fun guardarWorkoutEnFirestore(workout: Workout) {
         val db = FirebaseFirestore.getInstance()
-        // Usamos el nombre como ID del documento (asegúrate de que es único)
         db.collection("workouts").document(workout.nombre).set(workout)
             .addOnSuccessListener {
                 cargarWorkouts() // Recarga la lista completa desde Firestore

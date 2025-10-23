@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.spinningcat.MainActivity
 import com.example.spinningcat.R
-import com.example.spinningcat.model.User
+import com.example.spinningcat.room.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Login : AppCompatActivity() {

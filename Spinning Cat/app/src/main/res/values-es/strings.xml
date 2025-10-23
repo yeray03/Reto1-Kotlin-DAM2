@@ -8,6 +8,7 @@
     <string name="joinApp">Únete a Spinning Cat</string>
     <string name="returningUser">Usuario recurrente:</string>
     <string name="login">Iniciar sesión aquí</string>
+    <string name="tvNickname">Nombre de usuario:</string>
     <string name="tvName">Nombre:</string>
     <string name="tvSurnames">Apellidos:</string>
     <string name="tvEmail">Correo electrónico:</string>

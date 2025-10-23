@@ -1,6 +1,4 @@
 plugins {
-    // alias(libs.plugins.android.application)
-    // alias(libs.plugins.kotlin.android)
     id ("com.android.application")
     id ("org.jetbrains.kotlin.android")
     id ("kotlin-kapt")
@@ -62,12 +60,14 @@ dependencies {
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation("com.google.firebase:firebase-analytics")
 
-    // Add the dependency for Firebase Authentication (room)
-    implementation("androidx.room:room-runtime:2.5.2")
+    // ROOM
+    implementation(libs.androidx.room.runtime)
 
-    // KAPT para Room
-    kapt("androidx.room:room-compiler:2.5.2")
+    // Anottation processor
+    kapt(libs.androidx.room.compiler)
 
-    // Room KTX para funciones de extensión de Kotlin
-    implementation("androidx.room:room-ktx:2.5.2")
+    // Kotlin Extensions
+    implementation(libs.androidx.room.ktx)
+
+    implementation("com.google.code.gson:gson:2.10.1")
 }

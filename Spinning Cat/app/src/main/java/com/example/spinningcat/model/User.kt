@@ -1,6 +1,6 @@
-package com.example.spinningcat.adapter
+package com.example.spinningcat.model
 
-data class UserAdapter(
+data class User(
     var nombre: String = "",
     var apellidos: String = "",
     var contrasena: String = "",

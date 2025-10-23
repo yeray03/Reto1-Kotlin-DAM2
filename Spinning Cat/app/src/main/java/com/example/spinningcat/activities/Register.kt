@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.spinningcat.R
-import com.example.spinningcat.adapter.UserAdapter
+import com.example.spinningcat.model.User
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 import java.util.Locale
@@ -62,7 +62,7 @@ class Register : AppCompatActivity() {
 
         }
 
-        findViewById<Button>(R.id.btnCancel).setOnClickListener {
+        findViewById<Button>(R.id.btnGoback).setOnClickListener {
             finish()
             // NOTITA PARA QUIEN LO LEA:
             // NUNCA RECREAR LA ACTIVIDAD PRINCIPAL, SOLO HACER FINISH() PARA NO REINICIAR EL IDIOMA ACTUAL
@@ -111,7 +111,7 @@ class Register : AppCompatActivity() {
         val nivel = 0
 
         // Objeto UserAdapter con los datos del nuevo usuario
-        val usuario = UserAdapter(
+        val usuario = User(
             nombre,
             apellidos,
             contrasena,

@@ -3,6 +3,7 @@ package com.example.spinningcat.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -13,8 +14,6 @@ import com.example.spinningcat.R
 import com.example.spinningcat.adapter.TrainerWorkoutAdapter
 import com.example.spinningcat.model.Workout
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.text.set
-import kotlin.toString
 
 class Trainer : AppCompatActivity() {
 
@@ -28,7 +27,7 @@ class Trainer : AppCompatActivity() {
         // Referencias a vistas
         val recyclerWorkouts = findViewById<RecyclerView>(R.id.recyclerWorkouts)
         val btnAddWorkout = findViewById<Button>(R.id.btnFilter2)
-        val btnCancel = findViewById<Button>(R.id.btnCancel)
+        val btnCancel = findViewById<Button>(R.id.btnGoback)
         val editTextNumber = findViewById<EditText>(R.id.editTextNumber)
         val btnFilter = findViewById<Button>(R.id.btnFiltrar)
 
@@ -49,11 +48,10 @@ class Trainer : AppCompatActivity() {
         btnAddWorkout.setOnClickListener {
             // Ejemplo de añadir uno rápido
             val nuevo = Workout(
-                id = System.currentTimeMillis().toString(),
-                nombre = "Workout molón",
+                nombre = "WorkoutMolon",
                 descripcion = "Cardio al fallo",
                 nivel = 0,
-                videoUrl = null
+                videoUrl = "https://youtu.be/R4IZ_5WxZ_g"
             )
             guardarWorkoutEnFirestore(nuevo)
         }
@@ -84,8 +82,10 @@ class Trainer : AppCompatActivity() {
         }
 
 
-        // Volver
+        // Volver a Login
         btnCancel.setOnClickListener {
+            val intent = Intent(this, Login::class.java)
+            startActivity(intent)
             finish()
         }
     }
@@ -98,19 +98,21 @@ class Trainer : AppCompatActivity() {
             for (doc in result) {
                 val workout = doc.toObject(Workout::class.java)
                 // Asegúrate de que el id se guarda también
-                workout.id = doc.id
                 workouts.add(workout)
             }
+            Log.d("Trainer", "Workouts cargados: ${workouts.size}") // <-- log para comprobar carga correcta de workouts
             adapter?.setWorkouts(workouts)
         }.addOnFailureListener {
             Toast.makeText(this, "Error al cargar workouts", Toast.LENGTH_SHORT).show()
+            Log.e("Trainer", "Error al cargar workouts", it)
         }
     }
 
     // Guardar un nuevo workout en Firestore
     private fun guardarWorkoutEnFirestore(workout: Workout) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("workouts").document(workout.id).set(workout)
+        // Usamos el nombre como ID del documento (asegúrate de que es único)
+        db.collection("workouts").document(workout.nombre).set(workout)
             .addOnSuccessListener {
                 cargarWorkouts() // Recarga la lista completa desde Firestore
                 Toast.makeText(this, "Workout añadido", Toast.LENGTH_SHORT).show()
@@ -127,7 +129,7 @@ class Trainer : AppCompatActivity() {
         // Por simplicidad, se cambia solo el nombre (puedes expandirlo)
         workout.nombre = "Modificado"
         val db = FirebaseFirestore.getInstance()
-        db.collection("workouts").document(workout.id).set(workout)
+        db.collection("workouts").document(workout.nombre).set(workout)
             .addOnSuccessListener {
                 adapter?.updateWorkout(workout)
                 Toast.makeText(this, "Workout modificado", Toast.LENGTH_SHORT).show()
@@ -140,7 +142,7 @@ class Trainer : AppCompatActivity() {
     // Eliminar un workout
     private fun eliminarWorkout(workout: Workout) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("workouts").document(workout.id).delete()
+        db.collection("workouts").document(workout.nombre).delete()
             .addOnSuccessListener {
                 workouts.remove(workout)
                 adapter?.removeWorkout(workout)

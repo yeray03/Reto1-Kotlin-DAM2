@@ -86,7 +86,7 @@ class TrainerWorkoutAdapter(
     }
 
     fun updateWorkout(updated: Workout) {
-        val index = workouts.indexOfFirst { it.id == updated.id }
+        val index = workouts.indexOfFirst { it.nombre == updated.nombre }
         if (index >= 0) {
             workouts[index] = updated
             notifyItemChanged(index)

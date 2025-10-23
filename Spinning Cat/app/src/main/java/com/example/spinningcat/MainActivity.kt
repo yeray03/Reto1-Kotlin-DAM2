@@ -3,6 +3,7 @@ package com.example.spinningcat
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +17,7 @@ import android.widget.Spinner
 import android.widget.AdapterView
 import java.util.Locale
 import androidx.core.content.edit
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -23,6 +25,11 @@ import androidx.room.Query
 import com.example.spinningcat.activities.Register
 import com.example.spinningcat.adapter.SpinnerAdapter
 import com.example.spinningcat.activities.Login
+import com.example.spinningcat.room.RoomDB
+import com.example.spinningcat.room.entities.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.toString
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +42,40 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
+        // -----------------------
+        // The ROOM database does not exist when you installs de APP in the mobile
+        // It is technically created when you access it for the first time. Also,
+        // it is empty. So we preload it with some random data...
+
+        // The sole instance of db
+        val db = RoomDB(this)
+
+        // We launch this part as a Coroutine. This means, a thread parallel to the Activity.
+        // More or less. If we do like this, we can then update the UI easily, and this thread
+        // dies whenever the Activity also dies
+        lifecycleScope.launch(Dispatchers.IO) {
+            // We get the EnterpriseDao and then call to getAll method
+            val list = db.getUserDao().getAll()
+            if (list.isEmpty()) {
+
+                // Empty, so we add a few...
+                db.getUserDao().insertAll(
+                    User(nickname = "prueba01",nombre = "pruebaRoom", apellidos = "si", contrasena = "123", email = "prueba.com", fechaNacimiento = "11/11/1111", tipoUsuario = 0, nivel = 2,),
+                    User(nickname = "prueba02",nombre = "pruebaRoom2", apellidos = "no", contrasena = "321", email = "prueba2.com", fechaNacimiento = "22/22/2222", tipoUsuario = 1, nivel = 4)
+                )
+            }
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val usuarios = db.getUserDao().getAll()
+            usuarios.forEach { Log.i("BBDD", it.toString()) }
+
+        }
+
+        // -----------------------
+
 
         // Cambia la foto del imageview por el gif del gatete
         val imageViewGif = findViewById<ImageView>(R.id.imageViewGif)

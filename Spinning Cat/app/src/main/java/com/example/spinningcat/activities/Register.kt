@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.spinningcat.R
-import com.example.spinningcat.adapter.UserAdapter
+import com.example.spinningcat.room.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 import java.util.Locale
@@ -72,7 +72,7 @@ class Register : AppCompatActivity() {
     }
 
     fun crearCuenta() {
-//        val id = findViewById<TextView>(R.id.txtMail).text.toString()
+        val nickname = findViewById<TextView>(R.id.txtNickname).text.toString()
         val nombre = findViewById<TextView>(R.id.txtName).text.toString()
         val apellidos = findViewById<TextView>(R.id.txtSurnames).text.toString()
         val contrasena = findViewById<TextView>(R.id.txtPasswd).text.toString()
@@ -111,7 +111,8 @@ class Register : AppCompatActivity() {
         val nivel = 0
 
         // Objeto UserAdapter con los datos del nuevo usuario
-        val usuario = UserAdapter(
+        val usuario = User(
+            nickname,
             nombre,
             apellidos,
             contrasena,
@@ -125,7 +126,7 @@ class Register : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 var existe = false
                 for (document in result) {
-                    if (document.id.equals(usuario.email, ignoreCase = true)) {
+                    if (document.id.equals(usuario.nickname, ignoreCase = true)) {
                         existe = true
                         break
                     }
@@ -139,7 +140,7 @@ class Register : AppCompatActivity() {
                         .show()
                     return@addOnSuccessListener
                 } else {
-                    db.collection("usuarios").document(usuario.email).set(usuario)
+                    db.collection("usuarios").document(usuario.nickname).set(usuario)
                         .addOnSuccessListener {
                             Toast.makeText(
                                 applicationContext,

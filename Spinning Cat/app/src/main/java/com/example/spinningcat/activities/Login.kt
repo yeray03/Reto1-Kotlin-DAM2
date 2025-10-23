@@ -1,9 +1,7 @@
 package com.example.spinningcat.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -13,16 +11,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.example.spinningcat.MainActivity
 import com.example.spinningcat.R
-import com.example.spinningcat.adapter.UserAdapter
+import com.example.spinningcat.room.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import androidx.lifecycle.lifecycleScope
 
 class Login : AppCompatActivity() {
     private val dbFirestore = FirebaseFirestore.getInstance() //firestore instance
@@ -52,13 +44,13 @@ class Login : AppCompatActivity() {
         }
 
         // Lista para almacenar los usuarios obtenidos de Firestore
-        val userAdapterList = mutableListOf<UserAdapter>()
+        val userList = mutableListOf<User>()
 
         // Obtener todos los usuarios de la colección "usuarios"
         dbFirestore.collection("usuarios").get().addOnSuccessListener { result ->
             for (document in result) {
-                val userAdapter = document.toObject(UserAdapter::class.java) // Convertir el documento a un objeto User
-                userAdapterList.add(userAdapter) // Agregar el usuario a la lista
+                val user = document.toObject(User::class.java) // Convertir el documento a un objeto User
+                userList.add(user) // Agregar el usuario a la lista
             }
         }
             // Manejar errores al obtener los usuarios
@@ -82,7 +74,7 @@ class Login : AppCompatActivity() {
             }
 
             // Verificar el login
-            for (u in userAdapterList) { // recorrer la lista de usuarios obtenidos
+            for (u in userList) { // recorrer la lista de usuarios obtenidos
                 if (user.equals(u.email, ignoreCase = true) && passwd == u.contrasena) {
                     Toast.makeText(
                         applicationContext,

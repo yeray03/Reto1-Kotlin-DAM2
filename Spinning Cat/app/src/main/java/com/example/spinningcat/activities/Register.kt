@@ -62,7 +62,7 @@ class Register : AppCompatActivity() {
 
         }
 
-        findViewById<Button>(R.id.btnCancel).setOnClickListener {
+        findViewById<Button>(R.id.btnGoback).setOnClickListener {
             finish()
             // NOTITA PARA QUIEN LO LEA:
             // NUNCA RECREAR LA ACTIVIDAD PRINCIPAL, SOLO HACER FINISH() PARA NO REINICIAR EL IDIOMA ACTUAL

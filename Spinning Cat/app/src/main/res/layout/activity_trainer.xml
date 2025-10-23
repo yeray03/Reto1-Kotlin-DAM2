@@ -20,7 +20,7 @@
 
     <!-- Texto "Lista de Workouts:" -->
 
-
+    <!-- Logo del gimnasio -->
     <ImageView
         android:id="@+id/logo"
         android:layout_width="130dp"
@@ -33,6 +33,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.061" />
 
+    <!-- Botón de perfil/usuario -->
     <ImageView
         android:id="@+id/imageViewProfile"
         android:layout_width="36dp"
@@ -43,6 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Título "Entrenador" -->
     <TextView
         android:id="@+id/textViewTrainerTitle"
         android:layout_width="wrap_content"
@@ -59,9 +61,8 @@
         app:layout_constraintVertical_bias="0.148"
         tools:ignore="MissingConstraints" />
 
-    <!-- Botón Añadir workout -->
 
-    <!-- Botón Volver -->
+    <!-- Botón Añadir workout -->
 
     <Button
         android:id="@+id/btnFilter2"
@@ -131,8 +132,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerWorkouts"
-        android:layout_width="364dp"
-        android:layout_height="311dp"
+        android:layout_weight="1.0"
+        android:layout_width="317dp"
+        android:layout_height="298dp"
         android:clipToPadding="false"
         android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -143,21 +145,24 @@
         app:layout_constraintVertical_bias="0.626"
         tools:listitem="@layout/item_workout_trainer" />
 
+    <!-- Botón Volver -->
+
     <Button
-        android:id="@+id/btnCancel"
+        android:id="@+id/btnGoback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:layout_marginBottom="28dp"
         android:backgroundTint="@color/gray"
         android:text="@string/goback"
         android:textAllCaps="false"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/system_error_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.959" />
 
     <EditText
         android:id="@+id/editTextNumber"

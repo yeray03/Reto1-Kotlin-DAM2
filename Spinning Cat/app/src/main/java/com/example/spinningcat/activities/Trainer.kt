@@ -3,6 +3,7 @@ package com.example.spinningcat.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -26,7 +27,7 @@ class Trainer : AppCompatActivity() {
         // Referencias a vistas
         val recyclerWorkouts = findViewById<RecyclerView>(R.id.recyclerWorkouts)
         val btnAddWorkout = findViewById<Button>(R.id.btnFilter2)
-        val btnCancel = findViewById<Button>(R.id.btnCancel)
+        val btnCancel = findViewById<Button>(R.id.btnGoback)
         val editTextNumber = findViewById<EditText>(R.id.editTextNumber)
         val btnFilter = findViewById<Button>(R.id.btnFiltrar)
 
@@ -47,10 +48,11 @@ class Trainer : AppCompatActivity() {
         btnAddWorkout.setOnClickListener {
             // Ejemplo de añadir uno rápido
             val nuevo = Workout(
-                nombre = "Workout molón",
+
+                nombre = "WorkoutMolon",
                 descripcion = "Cardio al fallo",
                 nivel = 0,
-                videoUrl = null
+                videoUrl = "https://youtu.be/R4IZ_5WxZ_g"
             )
             guardarWorkoutEnFirestore(nuevo)
         }
@@ -81,8 +83,10 @@ class Trainer : AppCompatActivity() {
         }
 
 
-        // Volver
+        // Volver a Login
         btnCancel.setOnClickListener {
+            val intent = Intent(this, Login::class.java)
+            startActivity(intent)
             finish()
         }
     }
@@ -95,12 +99,13 @@ class Trainer : AppCompatActivity() {
             for (doc in result) {
                 val workout = doc.toObject(Workout::class.java)
                 // Asegúrate de que el id se guarda también
-                workout.nombre = doc.id
                 workouts.add(workout)
             }
+            Log.d("Trainer", "Workouts cargados: ${workouts.size}") // <-- log para comprobar carga correcta de workouts
             adapter?.setWorkouts(workouts)
         }.addOnFailureListener {
             Toast.makeText(this, "Error al cargar workouts", Toast.LENGTH_SHORT).show()
+            Log.e("Trainer", "Error al cargar workouts", it)
         }
     }
 

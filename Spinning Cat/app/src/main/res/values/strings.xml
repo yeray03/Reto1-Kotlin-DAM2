@@ -41,5 +41,6 @@
     <string name="usersError">Error retrieving users</string>
     <string name="filter_by_level">Filter by level</string>
     <string name="goback">Return</string>
+    <string name="modify">modify</string>
 
 </resources>

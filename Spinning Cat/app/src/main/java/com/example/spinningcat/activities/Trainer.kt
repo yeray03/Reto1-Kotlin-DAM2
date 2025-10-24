@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +31,8 @@ class Trainer : AppCompatActivity() {
         val btnCancel = findViewById<Button>(R.id.btnGoback)
         val editTextNumber = findViewById<EditText>(R.id.editTextNumber)
         val btnFilter = findViewById<Button>(R.id.btnFiltrar)
+        val imageViewProfile = findViewById<ImageView>(R.id.imageViewProfile)
+
 
         // Adapter
         adapter = TrainerWorkoutAdapter(
@@ -70,6 +73,13 @@ class Trainer : AppCompatActivity() {
                 adapter?.setWorkouts(filtrados)
             }
         }*/
+        // Ir a perfil de usuario
+        imageViewProfile.setOnClickListener {
+            val intent = Intent(this, Profile::class.java)
+            startActivity(intent)
+        }
+
+        // botón para filtrar por nivel
         btnFilter.setOnClickListener {
             val nivelStr = findViewById<EditText>(R.id.editTextNumber).text.toString().trim()
             val nivel = nivelStr.toIntOrNull()
@@ -123,7 +133,7 @@ class Trainer : AppCompatActivity() {
     }
 
 
-    // Modificar un workout (debes implementar un diálogo para editarlo y luego actualizar Firestore)
+    // Modificar un workout (aún no funcional)
     private fun modificarWorkout(workout: Workout) {
         // Aquí deberías mostrar un diálogo de edición
         // Por simplicidad, se cambia solo el nombre (puedes expandirlo)

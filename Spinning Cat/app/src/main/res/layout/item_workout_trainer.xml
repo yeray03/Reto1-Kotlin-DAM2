@@ -79,8 +79,6 @@
                 android:id="@+id/btnModificar"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/teal_700"
                 android:text="@string/modify"
                 android:textAllCaps="false"
                 android:textColor="#FFF" />

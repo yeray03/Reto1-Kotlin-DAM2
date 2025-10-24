@@ -34,7 +34,6 @@ class Login : AppCompatActivity() {
             Log.d("Adapter", "Updating adapter with ${NewUserEntity.size} UserEntity") // log: muestra por consola para hacer pruebas de las tablas
             UserEntity = NewUserEntity
 
-
         }*/
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

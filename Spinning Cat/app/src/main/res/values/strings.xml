@@ -8,6 +8,7 @@
     <string name="joinApp">Join Spinning Cat</string>
     <string name="returningUser">Returning User:</string>
     <string name="login">Login Here</string>
+    <string name="loginProfile">Login Here</string>
     <string name="tvNickname">Nickname:</string>
     <string name="tvName">Name:</string>
     <string name="tvSurnames">Surnames:</string>
@@ -41,6 +42,15 @@
     <string name="usersError">Error retrieving users</string>
     <string name="filter_by_level">Filter by level</string>
     <string name="goback">Return</string>
-    <string name="modify">modify</string>
+    <string name="modify">Modify</string>
+    <string name="delete">Delete</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="fecha_nacimiento">Birthdate</string>
+    <string name="cambiar_tema">Change theme mode</string>
+    <string name="guardar">Save</string>
+    <string name="volver">Go back</string>
+    <string name="perfil_guardado">Profile saved successfully!</string>
+    <string name="error_campos">Please complete all fields correctly</string>
+
 
 </resources>

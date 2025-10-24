@@ -8,6 +8,7 @@
     <string name="joinApp">Únete a Spinning Cat</string>
     <string name="returningUser">Usuario recurrente:</string>
     <string name="login">Iniciar sesión aquí</string>
+    <string name="loginProfile">Login</string>
     <string name="tvNickname">Nombre de usuario:</string>
     <string name="tvName">Nombre:</string>
     <string name="tvSurnames">Apellidos:</string>
@@ -41,6 +42,15 @@
     <string name="filter_by_level">Filtrar por nivel</string>
     <string name="goback">Volver</string>
     <string name="modify">modificar</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="fecha_nacimiento">Fecha de nacimiento</string>
+    <string name="cambiar_tema">Cambiar tema</string>
+    <string name="guardar">Guardar</string>
+    <string name="volver">Volver</string>
+    <string name="delete">Eliminar</string>
+    <string name="perfil_guardado">Perfil guardado correctamente!</string>
+    <string name="error_campos">Por favor, completa todos los campos correctamente</string>
+
 
 
 </resources>

@@ -31,8 +31,6 @@ import kotlin.text.clear
 class MainActivity : AppCompatActivity() {
 
     private val dbFirestore = FirebaseFirestore.getInstance() //firestore instance
-    private var localUser = listOf<User>()
-    private var remoteUser = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,21 +46,32 @@ class MainActivity : AppCompatActivity() {
         // Sincronizar usuarios de Firestore y Room
         dbFirestore.collection("usuarios").get().addOnSuccessListener { result ->
             lifecycleScope.launch(Dispatchers.IO) {
-                    // llenar lista remota en background
-                    remoteUser.clear()
-                    for (document in result) {
-                        val usuarioRemoto = document.toObject(User::class.java)
-                        remoteUser.add(usuarioRemoto)
-                    }
+                // llenar lista remota en background
+                val remoteUser = mutableListOf<User>()
+                for (document in result) {
+                    val usuarioRemoto = document.toObject(User::class.java)
+                    remoteUser.add(usuarioRemoto)
+                }
 
-                    // leer e insertar en Room en background (evita acceder en el hilo UI)
-                    val local = db.getUserDao().getAll()
-                    for (usuario in local) {
-                        val existeRemoto = remoteUser.any { it.nickname == usuario.nickname }
-                        if (!existeRemoto) {
-                            dbFirestore.collection("usuarios").document(usuario.nickname).set(usuario)
-                        }
+               val localUser = db.getUserDao().getAll()
+
+                // leer e insertar en Room los usuarios que no esten en local
+                for (usuarioRemoto in remoteUser) {
+                    // Verificar si el usuario ya existe en la base de datos local
+                    val existeLocal = localUser.any { it.nickname == usuarioRemoto.nickname }
+                    if (!existeLocal) {
+                        // Si no existe, insertarlo en la base de datos local
+                        db.getUserDao().insertAll(usuarioRemoto)
                     }
+                }
+
+                // leer e insertar en Firebase los usuarios que no esten en remoto
+                for (usuario in localUser) {
+                    val existeRemoto = remoteUser.any { it.nickname == usuario.nickname }
+                    if (!existeRemoto) {
+                        dbFirestore.collection("usuarios").document(usuario.nickname).set(usuario)
+                    }
+                }
             }
         }
 

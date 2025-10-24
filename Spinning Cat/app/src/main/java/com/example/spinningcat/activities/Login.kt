@@ -2,6 +2,7 @@ package com.example.spinningcat.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -11,31 +12,31 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.spinningcat.MainActivity
 import com.example.spinningcat.R
+import com.example.spinningcat.room.RoomDB
+import com.example.spinningcat.room.entities.RememberedUser
 import com.example.spinningcat.room.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Login : AppCompatActivity() {
     private val dbFirestore = FirebaseFirestore.getInstance() //firestore instance
+    private val userList = mutableListOf<User>()
+    private var rememberList = listOf<RememberedUser>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-
+        val dbRoom = RoomDB(this)
         val txtUser = findViewById<EditText>(R.id.txtNameLogin)
         val txtPass = findViewById<EditText>(R.id.txtPasswdLogin)
         val chkRemember = findViewById<CheckBox>(R.id.rememberMe)
-
-      /*  lifecycleScope.launch (Dispatchers.IO) {
-            val db = AppDatabase(this as Context)
-
-            Log.d("Adapter", "Updating adapter with ${NewUserEntity.size} UserEntity") // log: muestra por consola para hacer pruebas de las tablas
-            UserEntity = NewUserEntity
-
-
-        }*/
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -43,15 +44,31 @@ class Login : AppCompatActivity() {
             insets
         }
 
-        // Lista para almacenar los usuarios obtenidos de Firestore
-        val userList = mutableListOf<User>()
 
         // Obtener todos los usuarios de la colección "usuarios"
         dbFirestore.collection("usuarios").get().addOnSuccessListener { result ->
             for (document in result) {
-                val user = document.toObject(User::class.java) // Convertir el documento a un objeto User
+                val user =
+                    document.toObject(User::class.java) // Convertir el documento a un objeto User
                 userList.add(user) // Agregar el usuario a la lista
+
             }
+            lifecycleScope.launch(Dispatchers.IO) {
+                val usuarios = dbRoom.getUserDao().getAll()
+
+                for (usuarioRemoto in userList) {
+                    // Verificar si el usuario ya existe en la base de datos local
+                    val existeLocalmente = usuarios.any { it.nickname == usuarioRemoto.nickname }
+                    if (!existeLocalmente) {
+                        // Si no existe, insertarlo en la base de datos local
+                        dbRoom.getUserDao().insertAll(usuarioRemoto)
+                    }
+                }
+                usuarios.forEach {
+                    Log.i("BBDD", it.toString())
+                }
+            }
+
         }
             // Manejar errores al obtener los usuarios
             .addOnFailureListener { exception ->
@@ -62,44 +79,69 @@ class Login : AppCompatActivity() {
                 ).show()
             }
 
+
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            rememberList = dbRoom.getRememberDao().getRemember()
+            if (rememberList.isNotEmpty()) {
+                val usuario = rememberList.first()
+                withContext(Dispatchers.Main) {
+                    chkRemember.isChecked = true
+                    txtUser.setText(usuario.nickname)
+                    txtPass.setText(usuario.contrasena)
+                }
+            }
+        }
+
+
         findViewById<Button>(R.id.btnLogin_Login).setOnClickListener {
             var existe = false
-            val user: String = txtUser.text.toString()
+            val userInput: String = txtUser.text.toString()
             val passwd: String = txtPass.text.toString()
 
-            if (user.isBlank() || passwd.isBlank()) { // campo usuario vacío
+            if (userInput.isBlank() || passwd.isBlank()) { // campo usuario vacío
                 Toast.makeText(applicationContext, getString(R.string.fill), Toast.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
             }
 
             // Verificar el login
-            for (u in userList) { // recorrer la lista de usuarios obtenidos
-                if (user.equals(u.email, ignoreCase = true) && passwd == u.contrasena) {
+            for (user in userList) { // recorrer la lista de usuarios obtenidos
+                if (userInput.equals(
+                        user.nickname,
+                        ignoreCase = true
+                    ) && passwd == user.contrasena
+                ) {
                     Toast.makeText(
                         applicationContext,
-                        getString(R.string.welcome, u.nombre),
+                        getString(R.string.welcome, user.nombre),
                         Toast.LENGTH_SHORT
                     ).show()
 
                     // Guardar o limpiar datos de RememberMe usando Room
-                /*    lifecycleScope.launch {
-                        if (chkRemember.isChecked) {
-                            appDb.usuarioRememberDao().saveUser(
-                                UserEntity(
-                                    id = 0,
-                                    user = txtUser.text.toString(),
-                                    pass = txtPass.text.toString(),
-                                    checked = true
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            if (chkRemember.isChecked) {
+                                if (!rememberList.isEmpty()) {
+                                    dbRoom.getRememberDao().clearRememberedUser()
+                                }
+                                dbRoom.getRememberDao().insertRemember(
+                                    RememberedUser(
+                                        nickname = user.nickname,
+                                        contrasena = user.contrasena
+                                    )
                                 )
-                            )
-                        } else {
-                            appDb.usuarioRememberDao().clearRememberedUser()
+                            } else {
+                                if (!rememberList.isEmpty()) {
+                                    dbRoom.getRememberDao().clearRememberedUser()
+                                }
+                            }
                         }
-                    }*/
+
+                    }
 
 
-                    if (u.tipoUsuario == 0) { //trainee
+                    if (user.tipoUsuario == 0) { //trainee
                         // Ir a la actividad de Client
                         val intent = Intent(
                             applicationContext,
@@ -109,7 +151,7 @@ class Login : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                         return@setOnClickListener
-                    } else if (u.tipoUsuario == 1) { //trainer
+                    } else if (user.tipoUsuario == 1) { //trainer
                         // Ir a la actividad de Trainer
                         val intent = Intent(
                             applicationContext,
@@ -122,7 +164,7 @@ class Login : AppCompatActivity() {
                     }
 
                 }
-                if (user.equals(u.email, ignoreCase = true)) {
+                if (userInput.equals(user.nickname, ignoreCase = true)) {
                     existe = true
                 }
             }
@@ -133,17 +175,6 @@ class Login : AppCompatActivity() {
                 .show()
         }
 
-        // Listener para el checkbox (opcional: limpia si se desmarca)
-       /* chkRemember.setOnCheckedChangeListener { _, isChecked ->
-            if (!isChecked) {
-                txtUser.setText("")
-                txtPass.setText("")
-                lifecycleScope.launch {
-                    appDb.usuarioRememberDao().clearRememberedUser()
-                }
-            }
-        }
-*/
         findViewById<TextView>(R.id.gotoRegister).setOnClickListener {
             val intent = Intent(
                 applicationContext,

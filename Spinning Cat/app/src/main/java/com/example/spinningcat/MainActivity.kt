@@ -18,20 +18,21 @@ import android.widget.AdapterView
 import java.util.Locale
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import com.example.spinningcat.activities.Register
 import com.example.spinningcat.adapter.SpinnerAdapter
 import com.example.spinningcat.activities.Login
 import com.example.spinningcat.room.RoomDB
 import com.example.spinningcat.room.entities.User
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.toString
+import kotlin.text.clear
 
 class MainActivity : AppCompatActivity() {
+
+    private val dbFirestore = FirebaseFirestore.getInstance() //firestore instance
+    private var localUser = listOf<User>()
+    private var remoteUser = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,28 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val db = RoomDB(this)
+
+        // Sincronizar usuarios de Firestore y Room
+        dbFirestore.collection("usuarios").get().addOnSuccessListener { result ->
+            lifecycleScope.launch(Dispatchers.IO) {
+                    // llenar lista remota en background
+                    remoteUser.clear()
+                    for (document in result) {
+                        val usuarioRemoto = document.toObject(User::class.java)
+                        remoteUser.add(usuarioRemoto)
+                    }
+
+                    // leer e insertar en Room en background (evita acceder en el hilo UI)
+                    val local = db.getUserDao().getAll()
+                    for (usuario in local) {
+                        val existeRemoto = remoteUser.any { it.nickname == usuario.nickname }
+                        if (!existeRemoto) {
+                            dbFirestore.collection("usuarios").document(usuario.nickname).set(usuario)
+                        }
+                    }
+            }
+        }
 
 
         // -----------------------
@@ -50,31 +73,31 @@ class MainActivity : AppCompatActivity() {
         // it is empty. So we preload it with some random data...
 
         // The sole instance of db
-        val db = RoomDB(this)
+        //  val db = RoomDB(this)
 
         // We launch this part as a Coroutine. This means, a thread parallel to the Activity.
         // More or less. If we do like this, we can then update the UI easily, and this thread
         // dies whenever the Activity also dies
-        lifecycleScope.launch(Dispatchers.IO) {
-            // We get the EnterpriseDao and then call to getAll method
-            val list = db.getUserDao().getAll()
-            if (list.isEmpty()) {
-
-                // Empty, so we add a few...
-                db.getUserDao().insertAll(
-                    User(nickname = "prueba01",nombre = "pruebaRoom", apellidos = "si", contrasena = "123", email = "prueba.com", fechaNacimiento = "11/11/1111", tipoUsuario = 0, nivel = 2,),
-                    User(nickname = "prueba02",nombre = "pruebaRoom2", apellidos = "no", contrasena = "321", email = "prueba2.com", fechaNacimiento = "22/22/2222", tipoUsuario = 1, nivel = 4)
-                )
-            }
-        }
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            val usuarios = db.getUserDao().getAll()
-            usuarios.forEach { Log.i("BBDD", it.toString()) }
-
-        }
-
-        // -----------------------
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            // We get the EnterpriseDao and then call to getAll method
+//            val list = db.getUserDao().getAll()
+//            if (list.isEmpty()) {
+//
+//                // Empty, so we add a few...
+//                db.getUserDao().insertAll(
+//                    User(nickname = "prueba01",nombre = "pruebaRoom", apellidos = "si", contrasena = "123", email = "prueba.com", fechaNacimiento = "11/11/1111", tipoUsuario = 0, nivel = 2,),
+//                    User(nickname = "prueba02",nombre = "pruebaRoom2", apellidos = "no", contrasena = "321", email = "prueba2.com", fechaNacimiento = "22/22/2222", tipoUsuario = 1, nivel = 4)
+//                )
+//            }
+//        }
+//
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            val usuarios = db.getUserDao().getAll()
+//            usuarios.forEach { Log.i("BBDD", it.toString()) }
+//
+//        }
+//
+//        // -----------------------
 
 
         // Cambia la foto del imageview por el gif del gatete
@@ -121,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         )
         val initialPos = if (idiomaMovil == "es") 0 else 1
         val spinner = findViewById<Spinner>(R.id.idiomas)
-         spinner.adapter = SpinnerAdapter(this, idiomas)
+        spinner.adapter = SpinnerAdapter(this, idiomas)
         spinner.setSelection(initialPos)
 
         @Suppress("DEPRECATION")
@@ -143,11 +166,13 @@ class MainActivity : AppCompatActivity() {
                     recreate()
                 }
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // no hace nada pero es necesario para el override de arriba
             }
         }
     }
+
 
     // para cerrar la main activity desde otra actividad
     override fun onNewIntent(intent: Intent) {

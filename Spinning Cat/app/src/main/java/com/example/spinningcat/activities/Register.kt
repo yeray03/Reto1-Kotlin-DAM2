@@ -13,15 +13,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.spinningcat.R
+import com.example.spinningcat.room.RoomDB
 import com.example.spinningcat.room.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 
 
 class Register : AppCompatActivity() {
-    val db = FirebaseFirestore.getInstance()
+    private val dbFirestore = FirebaseFirestore.getInstance()
+    private val dbRoom = RoomDB(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,7 +47,13 @@ class Register : AppCompatActivity() {
             val day = c.get(Calendar.DAY_OF_MONTH)
 
             val datePicker = DatePickerDialog(this, { _, selYear, selMonth, selDay ->
-                val dateFormat = String.format(Locale.getDefault(),"%02d/%02d/%04d", selDay, selMonth + 1, selYear) // Formatear la fecha como DD/MM/YYYY
+                val dateFormat = String.format(
+                    Locale.getDefault(),
+                    "%02d/%02d/%04d",
+                    selDay,
+                    selMonth + 1,
+                    selYear
+                ) // Formatear la fecha como DD/MM/YYYY
                 txtDate.setText(dateFormat)
             }, year, month, day)
             datePicker.datePicker.maxDate = System.currentTimeMillis()
@@ -122,7 +133,7 @@ class Register : AppCompatActivity() {
             nivel
         )
 
-        db.collection("usuarios").get()
+        dbFirestore.collection("usuarios").get()
             .addOnSuccessListener { result ->
                 var existe = false
                 for (document in result) {
@@ -140,7 +151,10 @@ class Register : AppCompatActivity() {
                         .show()
                     return@addOnSuccessListener
                 } else {
-                    db.collection("usuarios").document(usuario.nickname).set(usuario)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        dbRoom.getUserDao().insertAll(usuario)
+                    }
+                    dbFirestore.collection("usuarios").document(usuario.nickname).set(usuario)
                         .addOnSuccessListener {
                             Toast.makeText(
                                 applicationContext,

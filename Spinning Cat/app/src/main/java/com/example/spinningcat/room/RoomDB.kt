@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.spinningcat.room.converter.Converters
 import com.example.spinningcat.room.dao.EjercicioDao
 import com.example.spinningcat.room.dao.UsuarioDao
 import com.example.spinningcat.room.dao.WorkoutDao
@@ -12,6 +14,7 @@ import com.example.spinningcat.room.entities.User
 import com.example.spinningcat.room.entities.Workout
 
 @Database(entities = [User::class, Workout::class, Ejercicio::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class RoomDB : RoomDatabase() {
 
     companion object {

@@ -130,22 +130,23 @@
         app:layout_constraintVertical_bias="0.272"
         tools:ignore="MissingConstraints" />
 
+    <!-- Botón Volver -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerWorkouts"
-        android:layout_weight="1.0"
         android:layout_width="317dp"
         android:layout_height="298dp"
+        android:layout_marginTop="11dp"
+        android:layout_weight="1.0"
         android:clipToPadding="false"
         android:paddingBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnFilter2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.574"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.626"
+        app:layout_constraintTop_toBottomOf="@+id/textViewWorkoutList2"
+        app:layout_constraintVertical_bias="0.071"
         tools:listitem="@layout/item_workout_trainer" />
 
-    <!-- Botón Volver -->
     <Button
         android:id="@+id/btnGoback"
         android:layout_width="0dp"
@@ -161,17 +162,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextNumber"
-        android:layout_width="76dp"
-        android:layout_height="52dp"
-        android:ems="10"
-        android:inputType="number"
+    <Spinner
+        android:id="@+id/spinnerNivel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.265" />
+        app:layout_constraintVertical_bias="0.271" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

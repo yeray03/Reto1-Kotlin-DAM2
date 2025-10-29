@@ -132,14 +132,17 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
+                // accede a las preferencias de la app donde se guarda el idioma seleccionado
                 val prefs = getSharedPreferences("settings", MODE_PRIVATE)
                 val selectedLang = if (position == 0) "es" else "en"
                 if (prefs.getString("lang", "") != selectedLang) {
                     prefs.edit { putString("lang", selectedLang) }
+                    // crea un objeto Locale con el idioma seleccionado
                     val locale = Locale(selectedLang)
                     val config = resources.configuration
                     config.setLocale(locale)
                     resources.updateConfiguration(config, resources.displayMetrics)
+                    // recarga la actividad para que se apliquen los cambios del idioma
                     recreate()
                 }
             }

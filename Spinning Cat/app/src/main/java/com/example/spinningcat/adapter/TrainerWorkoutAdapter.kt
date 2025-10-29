@@ -25,7 +25,6 @@ class TrainerWorkoutAdapter(
     // Clase ViewHolder normal (no inner)
     class WorkoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtNombre = itemView.findViewById<TextView>(R.id.txtNombre)
-        val txtDescripcion = itemView.findViewById<TextView>(R.id.txtDescripcion)
         val txtNivel = itemView.findViewById<TextView>(R.id.txtNivel)
         val txtVideo = itemView.findViewById<TextView>(R.id.txtVideo)
         val imgVideo = itemView.findViewById<ImageView>(R.id.imgVideo)
@@ -42,8 +41,9 @@ class TrainerWorkoutAdapter(
     override fun onBindViewHolder(holder: WorkoutViewHolder, position: Int) {
         val workout = workouts[position]
         holder.txtNombre.text = workout.nombre
-        holder.txtDescripcion.text = workout.descripcion
         holder.txtNivel.text = "Nivel: ${workout.nivel}"
+
+        // Mostrar ejercicios y número de ejercicios
 
         // Mostrar vídeo si existe
         if (!workout.videoUrl.isNullOrBlank()) {

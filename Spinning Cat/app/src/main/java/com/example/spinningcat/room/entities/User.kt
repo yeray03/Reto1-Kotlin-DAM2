@@ -2,8 +2,10 @@ package com.example.spinningcat.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "t_usuario")
+
 data class User(
     @PrimaryKey(autoGenerate = false)
     var nickname: String = "",
@@ -14,4 +16,4 @@ data class User(
     var fechaNacimiento: String = "",
     var tipoUsuario: Int = -1,
     var nivel: Int = -1,
-)
+) : Serializable

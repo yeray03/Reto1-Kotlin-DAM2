@@ -9,6 +9,19 @@ import java.util.ArrayList
 class Converters {
     private val gson = Gson()
 
+    // Conversor para List<String>
+    @TypeConverter
+    fun fromStringList(list: List<String>?): String? {
+        return if (list == null) null else gson.toJson(list)
+    }
+    //
+    @TypeConverter
+    fun toStringList(data: String?): List<String> {
+        if (data.isNullOrEmpty()) return emptyList()
+        val listType = object : TypeToken<List<String>>() {}.type
+        return gson.fromJson(data, listType)
+    }
+
     @TypeConverter
     fun fromSerieList(series: List<Serie>?): String? {
         return if (series.isNullOrEmpty()) null else gson.toJson(series)

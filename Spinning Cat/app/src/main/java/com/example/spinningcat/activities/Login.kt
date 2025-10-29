@@ -97,8 +97,7 @@ class Login : AppCompatActivity() {
                         }
                     }*/
 
-
-                    if (u.tipoUsuario == 0) { //trainee
+               /*     if (u.tipoUsuario == 0) { //trainee
                         // Ir a la actividad de Client
                         val intent = Intent(
                             applicationContext,
@@ -115,6 +114,21 @@ class Login : AppCompatActivity() {
                             Trainer::class.java
                         )
                         cerrarMainActivity()
+                        startActivity(intent)
+
+                        finish()
+                        return@setOnClickListener
+                    }*/
+
+                    if (u.tipoUsuario == 0) { // trainee
+                        val intent = Intent(this, Trainee::class.java)
+                        intent.putExtra("usuario", u)
+                        startActivity(intent)
+                        finish()
+                        return@setOnClickListener
+                    } else if (u.tipoUsuario == 1) { // trainer
+                        val intent = Intent(this, Trainer::class.java)
+                        intent.putExtra("usuario", u)
                         startActivity(intent)
                         finish()
                         return@setOnClickListener

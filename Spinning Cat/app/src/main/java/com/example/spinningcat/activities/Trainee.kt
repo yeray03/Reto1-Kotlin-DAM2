@@ -1,6 +1,8 @@
 package com.example.spinningcat.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,6 +18,13 @@ class Trainee : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val btnWorkouts = findViewById<Button>(R.id.btnWorkouts)
+        btnWorkouts.setOnClickListener {
+            val intent = Intent(this, Workouts::class.java)
+            startActivity(intent)
+
         }
     }
 }

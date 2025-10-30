@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SpinningCat">
         <activity
+            android:name=".activities.Workouts"
+            android:exported="false" />
+        <activity
             android:name=".activities.Profile"
             android:exported="false"
             android:screenOrientation="portrait" />

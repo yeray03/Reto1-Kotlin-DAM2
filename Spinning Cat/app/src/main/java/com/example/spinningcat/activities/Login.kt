@@ -88,7 +88,6 @@ class Login : AppCompatActivity() {
             }
         }
 
-
         findViewById<Button>(R.id.btnLogin_Login).setOnClickListener {
             var existe = false
             val userInput: String = txtUser.text.toString()
@@ -101,8 +100,11 @@ class Login : AppCompatActivity() {
             }
 
             // Verificar el login
-            for (user in userList) { // recorrer la lista de usuarios obtenidos
-                if (userInput.equals(user.email, ignoreCase = true) && passwd == user.contrasena) {
+            for (user in userList) { // recorrer la lista de usuarios obtenida de Firestore
+                if (
+                    (userInput.equals(user.email, ignoreCase = true) || userInput.equals(user.nickname, ignoreCase = true))
+                    && passwd == user.contrasena
+                ) {
                     Toast.makeText(
                         applicationContext,
                         getString(R.string.welcome, user.nombre),
@@ -113,7 +115,7 @@ class Login : AppCompatActivity() {
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
                             if (chkRemember.isChecked) {
-                                if (!rememberList.isEmpty()) {
+                                if (rememberList.isNotEmpty()) {
                                     dbRoom.getRememberDao().clearRememberedUser()
                                 }
                                 dbRoom.getRememberDao().insertRemember(
@@ -123,40 +125,32 @@ class Login : AppCompatActivity() {
                                     )
                                 )
                             } else {
-                                if (!rememberList.isEmpty()) {
+                                if (rememberList.isNotEmpty()) {
                                     dbRoom.getRememberDao().clearRememberedUser()
                                 }
                             }
                         }
                     }
 
-
                     if (user.tipoUsuario == 0) { //trainee
-                        // Ir a la actividad de Client
-                        val intent = Intent(
-                            applicationContext,
-                            Trainee::class.java
-                        )
+                        val intent = Intent(applicationContext, Trainee::class.java)
                         cerrarMainActivity()
                         startActivity(intent)
                         finish()
                         return@setOnClickListener
                     } else if (user.tipoUsuario == 1) { //trainer
-                        // Ir a la actividad de Trainer
-                        val intent = Intent(
-                            applicationContext,
-                            Trainer::class.java
-                        )
+                        val intent = Intent(applicationContext, Trainer::class.java)
                         cerrarMainActivity()
                         startActivity(intent)
                         finish()
                         return@setOnClickListener
                     }
                 }
-                if (userInput.equals(user.nickname, ignoreCase = true)) {
+                if (userInput.equals(user.nickname, ignoreCase = true) || userInput.equals(user.email, ignoreCase = true)) {
                     existe = true
                 }
             }
+
             if (existe) { // usuario existe pero contraseña incorrecta
                 Toast.makeText(applicationContext, R.string.invalidPasswd, Toast.LENGTH_SHORT)
                     .show()

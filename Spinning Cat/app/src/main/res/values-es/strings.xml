@@ -12,7 +12,7 @@
     <string name="tvNickname">Nombre de usuario:</string>
     <string name="tvName">Nombre:</string>
     <string name="tvSurnames">Apellidos:</string>
-    <string name="tvEmail">Correo electrónico:</string>
+    <string name="tvEmail">Correo electrónico o nickname:</string>
     <string name="tvPassword">Contraseña:</string>
     <string name="tvConfirmPassword">Confirmar contraseña:</string>
     <string name="tvDate">Fecha de nacimiento:</string>
@@ -50,7 +50,20 @@
     <string name="delete">Eliminar</string>
     <string name="perfil_guardado">Perfil guardado correctamente!</string>
     <string name="error_campos">Por favor, completa todos los campos correctamente</string>
-
-
+    <string name="nombre_del_workout">Nombre del Workout</string>
+    <string name="workout">Workout</string>
+    <string name="user_level">Nivel del usuario: 1</string>
+    <string name="trainerWorkout">Trainer</string>
+    <string name="profile">Profile</string>
+    <string name="filter">Filtrar</string>
+    <string name="filter_by_levelWorkout">Filtrar por nivel</string>
+    <string name="level">Nivel: 1</string>
+    <string name="tiempo_total_00_00_00">Tiempo total: 00:00:00</string>
+    <string name="expected_time_00_00_00">Tiempo previsto: 00:00:00</string>
+    <string name="date_2025_01_01">Fecha: 2025-01-01</string>
+    <string name="play">Reproducir</string>
+    <string name="completed_100">% Completados: 100</string>
+    <string name="ver_workouts">Ver Workouts</string>
+    <string name="trainee">trainee</string>
 
 </resources>

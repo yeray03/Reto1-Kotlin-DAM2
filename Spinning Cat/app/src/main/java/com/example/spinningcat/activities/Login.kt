@@ -134,12 +134,14 @@ class Login : AppCompatActivity() {
 
                     if (user.tipoUsuario == 0) { //trainee
                         val intent = Intent(applicationContext, Workouts::class.java)
+                        intent.putExtra("usuario", user)
                         cerrarMainActivity()
                         startActivity(intent)
                         finish()
                         return@setOnClickListener
                     } else if (user.tipoUsuario == 1) { //trainer
                         val intent = Intent(applicationContext, Trainer::class.java)
+                        intent.putExtra("usuario", user)
                         cerrarMainActivity()
                         startActivity(intent)
                         finish()

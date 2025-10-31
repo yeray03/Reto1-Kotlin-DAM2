@@ -1,8 +1,8 @@
 package com.example.spinningcat.activities
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -22,9 +22,12 @@ import com.example.spinningcat.adapter.SpinnerAdapter
 import com.example.spinningcat.room.entities.User
 import java.util.Calendar
 import java.util.Locale
+import androidx.core.content.edit
 
+@SuppressLint("UseSwitchCompatOrMaterialCode")
 class Profile : AppCompatActivity() {
 
+    private var usuario: User? = null
     private lateinit var etLogin: EditText
     private lateinit var etNombre: EditText
     private lateinit var etApellidos: EditText
@@ -32,8 +35,8 @@ class Profile : AppCompatActivity() {
     private lateinit var etFechaNacimiento: EditText
     private lateinit var btnVolver: Button
     private lateinit var btnGuardar: Button
-    private lateinit var switchTema: Switch
-    private lateinit var spinnerIdioma: Spinner
+    private lateinit var tema: Switch
+    private lateinit var spinner: Spinner
     private lateinit var tvNombre: TextView
     private lateinit var tvLogin: TextView
     private lateinit var ivAvatar: ImageView
@@ -60,16 +63,18 @@ class Profile : AppCompatActivity() {
         etFechaNacimiento = findViewById(R.id.etFechaNacimiento)
         btnVolver = findViewById(R.id.btnVolver)
         btnGuardar = findViewById(R.id.btnGuardar)
-        switchTema = findViewById(R.id.switchTema)
-        spinnerIdioma = findViewById(R.id.spinnerIdioma)
+        tema = findViewById(R.id.switchTema)
+        spinner = findViewById(R.id.spinnerIdioma)
         tvNombre = findViewById(R.id.tvNombre)
         tvLogin = findViewById(R.id.tvLogin)
         ivAvatar = findViewById(R.id.ivAvatar)
         btnEdit = findViewById(R.id.btnEdit)
 
         // Cargar datos del usuario (ejemplo simulado)
-        val user = cargarUsuarioActivo()
-        mostrarUsuario(user)
+        val extras: Bundle? = intent.extras
+        @Suppress("DEPRECATION")
+        usuario = extras?.getSerializable("usuario") as User?
+        mostrarUsuario(usuario)
 
         // Bloquear edición del login
         etLogin.isEnabled = false
@@ -90,16 +95,16 @@ class Profile : AppCompatActivity() {
             habilitarEdicion(true)
         }
 
-        val idiomaMovil = Locale.getDefault().language
         val idiomas = listOf(
             R.drawable.icono_espanita_foreground,
             R.drawable.icono_inglish_pitinglish_foreground
         )
-        val initialPos = if (idiomaMovil == "es") 0 else 1
-        val spinner = findViewById<Spinner>(R.id.spinnerIdioma)
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val initialPos = if (prefs.getString("lang","") == "es") 0 else 1
         spinner.adapter = SpinnerAdapter(this, idiomas)
         spinner.setSelection(initialPos)
 
+        @Suppress("DEPRECATION")
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -111,7 +116,7 @@ class Profile : AppCompatActivity() {
                 val prefs = getSharedPreferences("settings", MODE_PRIVATE)
                 val selectedLang = if (position == 0) "es" else "en"
                 if (prefs.getString("lang", "") != selectedLang) {
-                    prefs.edit().putString("lang", selectedLang).apply()
+                    prefs.edit { putString("lang", selectedLang) }
                     val locale = Locale(selectedLang)
                     val config = resources.configuration
                     config.setLocale(locale)
@@ -119,40 +124,28 @@ class Profile : AppCompatActivity() {
                     recreate()
                 }
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         // Cambiar tema
-        switchTema.isChecked = temaOscuro
-        switchTema.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferences.edit().putBoolean("temaOscuro", isChecked).apply()
+        tema.isChecked = temaOscuro
+        tema.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit { putBoolean("temaOscuro", isChecked) }
             AppCompatDelegate.setDefaultNightMode(
                 if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
             )
         }
     }
 
-    private fun mostrarUsuario(user: User) {
-        // etLogin.setText(user.login)
-        etNombre.setText(user.nombre)
-        etApellidos.setText(user.apellidos)
-        etEmail.setText(user.email)
-        etFechaNacimiento.setText(user.fechaNacimiento)
-        tvNombre.text = "${user.nombre} ${user.apellidos}"
-        // tvLogin.text = "@${user.login}"
+    private fun mostrarUsuario(user: User?) {
+        etLogin.setText(user?.nickname)
+        etNombre.setText(user?.nombre)
+        etApellidos.setText(user?.apellidos)
+        etEmail.setText(user?.email)
+        etFechaNacimiento.setText(user?.fechaNacimiento)
+        tvNombre.text = "${user?.nombre} ${user?.apellidos}"
     }
-
-    private fun cargarUsuarioActivo(): User {
-        // Simulación. Debería venir de Firestore, Room, etc.
-        return User(
-            // login = "saddeb",
-            nombre = "Sandrine",
-            apellidos = "Quignaudon",
-            email = "sandrine@example.com",
-            fechaNacimiento = "12/05/1996"
-        )
-    }
-
     private fun habilitarEdicion(habilitar: Boolean) {
         etNombre.isEnabled = habilitar
         etApellidos.isEnabled = habilitar
@@ -163,7 +156,6 @@ class Profile : AppCompatActivity() {
 
     private fun guardarCambios() {
         val user = User(
-            // login = etLogin.text.toString(),
             nombre = etNombre.text.toString(),
             apellidos = etApellidos.text.toString(),
             email = etEmail.text.toString(),

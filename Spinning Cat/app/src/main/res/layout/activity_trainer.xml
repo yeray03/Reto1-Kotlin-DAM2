@@ -82,22 +82,6 @@
 
     <!-- RecyclerView para la lista de workouts -->
 
-    <Button
-        android:id="@+id/btnFiltrar"
-        android:layout_width="128dp"
-        android:layout_height="59dp"
-        android:backgroundTint="#101010"
-        android:text="@string/filter_by_level"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.929"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.244"
-        tools:ignore="MissingConstraints" />
-
     <TextView
         android:id="@+id/textViewWorkoutList2"
         android:layout_width="wrap_content"
@@ -114,6 +98,8 @@
         app:layout_constraintVertical_bias="0.338"
         tools:ignore="MissingConstraints" />
 
+    <!-- Botón Volver -->
+
     <TextView
         android:id="@+id/textViewWorkoutList"
         android:layout_width="wrap_content"
@@ -124,13 +110,11 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.272"
+        app:layout_constraintVertical_bias="0.271"
         tools:ignore="MissingConstraints" />
-
-    <!-- Botón Volver -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerWorkouts"
@@ -168,6 +152,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.271" />

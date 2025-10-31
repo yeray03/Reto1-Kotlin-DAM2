@@ -12,7 +12,4 @@ interface UsuarioDao {
 
     @Insert
     fun insertAll(vararg usuario: User)
-
-
-
 }

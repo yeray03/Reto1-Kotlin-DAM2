@@ -21,8 +21,8 @@ import com.example.spinningcat.room.entities.WorkoutHistoryItem
         val nivel: TextView = view.findViewById(R.id.nivelText)
         val tiempoTotal: TextView = view.findViewById(R.id.tiempoTotalText)
         val tiempoPrevisto: TextView = view.findViewById(R.id.tiempoPrevistoText)
-        val fecha: TextView = view.findViewById(R.id.fechaText)
-        val porcentaje: TextView = view.findViewById(R.id.porcentajeText)
+        val fecha: TextView = view.findViewById(R.id.fechayHoraText)
+        val porcentaje: TextView = view.findViewById(R.id.ejerciciosTotales)
         val videoButton: Button = view.findViewById(R.id.videoButton)
     }
 

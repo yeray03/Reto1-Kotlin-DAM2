@@ -9,7 +9,11 @@ data class Workout(
     @PrimaryKey(autoGenerate = false)
     var nombre: String = "",
     var nivel: Int = 0,
-    var ejercicios: List<String> = listOf(),
+    var ejerciciosCompletado: List<String> = listOf(),
+    var ejerciciosTotales: List<String> = listOf(),
+    var tiempoPrevisto: String = "",
+    var tiempoTotal: String = "",
+    var porcentajeCompletado: Int = 0,
     var numEjercicio: Int = 0,
     var videoUrl: String = ""
 ) : Serializable

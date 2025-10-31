@@ -35,14 +35,27 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/fechaText"
+        android:id="@+id/fechayHoraText"
         android:text="@string/date_2025_01_01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/porcentajeText"
+        android:id="@+id/ejerciciosCompletados"
         android:text="@string/completed_100"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/ejerciciosTotales"
+        android:text="@string/ejsTotales"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/porcentajeCompletado"
+        android:text="@string/porcentaje"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

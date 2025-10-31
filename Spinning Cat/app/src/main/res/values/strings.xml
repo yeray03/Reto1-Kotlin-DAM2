@@ -66,6 +66,9 @@
     <string name="completed_100">% Finished: 100</string>
     <string name="ver_workouts">See all Workouts</string>
     <string name="trainee">trainee</string>
+    <string name="ejsTotales">Exercises</string>
+    <string name="porcentaje">Finished percentage</string>
+    <string name="entrenador">Trainer</string>
 
 
 </resources>

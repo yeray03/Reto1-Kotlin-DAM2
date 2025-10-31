@@ -91,15 +91,13 @@
         android:id="@+id/btnGoback"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:backgroundTint="@color/gray"
+        android:layout_marginBottom="16dp"
         android:text="@string/goback"
         android:textAllCaps="false"
-        android:textColor="@color/black"
+        android:textColor="@color/bgColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp" />
-
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/filterButton"

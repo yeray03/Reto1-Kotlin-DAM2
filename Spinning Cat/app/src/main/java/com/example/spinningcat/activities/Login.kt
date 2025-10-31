@@ -133,7 +133,7 @@ class Login : AppCompatActivity() {
                     }
 
                     if (user.tipoUsuario == 0) { //trainee
-                        val intent = Intent(applicationContext, Trainee::class.java)
+                        val intent = Intent(applicationContext, Workouts::class.java)
                         cerrarMainActivity()
                         startActivity(intent)
                         finish()

@@ -62,7 +62,7 @@ class Trainer : AppCompatActivity() {
             val nuevo = Workout(
                     nombre = "WorkoutMolon",
                     nivel = 1,
-                    ejercicios = listOf("Burpees", "Flexiones", "Sentadillas"),
+                    ejerciciosTotales = listOf("Burpees", "Flexiones", "Sentadillas"),
                     numEjercicio = 3,
                     videoUrl = "https://youtu.be/R4IZ_5WxZ_g"
             )
@@ -133,7 +133,7 @@ class Trainer : AppCompatActivity() {
                 val workout = Workout(
                     nombre = nombre,
                     nivel = nivel,
-                    ejercicios = ejerciciosIds,
+                    ejerciciosTotales = ejerciciosIds,
                     numEjercicio = numEjercicio,
                     videoUrl = videoUrl
                 )
@@ -144,7 +144,6 @@ class Trainer : AppCompatActivity() {
             Toast.makeText(this, "Error al cargar workouts", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     // Guardar un nuevo workout en Firestore
     private fun guardarWorkoutEnFirestore(workout: Workout) {

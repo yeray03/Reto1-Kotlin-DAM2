@@ -17,11 +17,13 @@ import com.example.spinningcat.room.entities.Workout
 import com.example.spinningcat.room.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.Spinner
+import android.widget.TextView
 import kotlin.text.clear
 import kotlin.text.get
 
 class Trainer : AppCompatActivity() {
 
+    private var usuario : User = User()
     private var adapter: TrainerWorkoutAdapter? = null
     private var workouts: MutableList<Workout> = mutableListOf()
 
@@ -29,18 +31,20 @@ class Trainer : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trainer)
 
+
         // Referencias a vistas
         val recyclerWorkouts = findViewById<RecyclerView>(R.id.recyclerWorkouts)
         val btnAddWorkout = findViewById<Button>(R.id.btnFilter2)
         val btnCancel = findViewById<Button>(R.id.btnGoback)
         val spinnerNivel = findViewById<android.widget.Spinner>(R.id.spinnerNivel)
-        val btnFilter = findViewById<Button>(R.id.btnFiltrar)
         val imageViewProfile = findViewById<ImageView>(R.id.imageViewProfile)
 
         // Recibir el usuario del intent
-        val usuario = intent.getSerializableExtra("usuario") as? User
-        if (usuario!= null) {
-            Log.d("Trainer", "Usuario recibido: ${usuario.nombre}")
+        val extras: Bundle? = intent.extras
+        @Suppress("DEPRECATION")
+        if (extras?.getSerializable("usuario") != null) {
+           usuario = extras.getSerializable("usuario") as User
+            Log.i("Trainer", "Usuario recibido: ${usuario.nombre}")
         }
 
         // Adapter
@@ -85,27 +89,32 @@ class Trainer : AppCompatActivity() {
         // Ir a perfil de usuario
         imageViewProfile.setOnClickListener {
             val intent = Intent(this, Profile::class.java)
+            intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
 
         // Rellenar el spinner con niveles
-        val niveles = listOf("0", "1", "2", "3")
+//        val niveles = listOf("0", "1", "2", "3")
+        val niveles: ArrayList<String> = arrayListOf("Default")
+        for (i in 0..(usuario.nivel)) {
+            niveles.add(i.toString())
+        }
         val adapterSpinner = android.widget.ArrayAdapter(this, android.R.layout.simple_spinner_item, niveles)
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerNivel.adapter = adapterSpinner
 
         // botón para filtrar por nivel
-        btnFilter.setOnClickListener {
-            val nivelStr = spinnerNivel.selectedItem as String
-            val nivel = nivelStr.toIntOrNull()
-            if (nivel != null) {
-                val filtrados = workouts.filter { it.nivel == nivel }
-                adapter?.setWorkouts(filtrados)
-            } else {
-                adapter?.setWorkouts(workouts)
-                Toast.makeText(this, "Selecciona un nivel válido", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        btnFilter.setOnClickListener {
+//            val nivelStr = spinnerNivel.selectedItem as String
+//            val nivel = nivelStr.toIntOrNull()
+//            if (nivel != null) {
+//                val filtrados = workouts.filter { it.nivel == nivel }
+//                adapter?.setWorkouts(filtrados)
+//            } else {
+//                adapter?.setWorkouts(workouts)
+//                Toast.makeText(this, "Selecciona un nivel válido", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
         // Volver a Login
         btnCancel.setOnClickListener {

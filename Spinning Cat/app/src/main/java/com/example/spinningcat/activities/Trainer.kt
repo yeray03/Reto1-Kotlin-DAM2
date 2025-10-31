@@ -18,19 +18,20 @@ import com.example.spinningcat.room.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.Spinner
 import android.widget.TextView
+import com.google.firebase.firestore.DocumentReference
 import kotlin.text.clear
 import kotlin.text.get
 
 class Trainer : AppCompatActivity() {
 
-    private var usuario : User = User()
+    private var usuario: User = User()
     private var adapter: TrainerWorkoutAdapter? = null
     private var workouts: MutableList<Workout> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trainer)
-
+        val db = FirebaseFirestore.getInstance()
 
         // Referencias a vistas
         val recyclerWorkouts = findViewById<RecyclerView>(R.id.recyclerWorkouts)
@@ -43,13 +44,13 @@ class Trainer : AppCompatActivity() {
         val extras: Bundle? = intent.extras
         @Suppress("DEPRECATION")
         if (extras?.getSerializable("usuario") != null) {
-           usuario = extras.getSerializable("usuario") as User
+            usuario = extras.getSerializable("usuario") as User
             Log.i("Trainer", "Usuario recibido: ${usuario.nombre}")
         }
 
         // Adapter
         adapter = TrainerWorkoutAdapter(
-            workouts,
+            workouts, // Pasar la lista mutable vacía
             onModificar = { workout -> modificarWorkout(workout) },
             onEliminar = { workout -> eliminarWorkout(workout) },
             onReproducir = { url -> reproducirVideo(url) }
@@ -62,30 +63,35 @@ class Trainer : AppCompatActivity() {
 
         // Añadir workout
         btnAddWorkout.setOnClickListener {
+
             // Ejemplo de añadir uno rápido
             val nuevo = Workout(
-                    nombre = "WorkoutMolon",
-                    nivel = 1,
-                    ejerciciosTotales = listOf("Burpees", "Flexiones", "Sentadillas"),
-                    numEjercicio = 3,
-                    videoUrl = "https://youtu.be/R4IZ_5WxZ_g"
+                nombre = "WorkoutMolon",
+                nivel = 1,
+                ejerciciosTotales = listOf(
+                    db.collection("ejercicios").document("burpees"),
+                    db.collection("ejercicios").document("flexiones"),
+                    db.collection("ejercicios").document("sentadilla")
+                ),
+                numEjercicio = 3,
+                videoUrl = "https://youtu.be/R4IZ_5WxZ_g"
             )
             guardarWorkoutEnFirestore(nuevo)
         }
 
         // Filtrar workouts, por nivel fijo (1)
-   /*     btnFilter.setOnClickListener {
-            val filtro = editTextFilter.text.toString().trim()
-            if (filtro.isEmpty()) {
-                adapter?.setWorkouts(workouts)
-            } else {
-                val filtrados = workouts.filter {
-                    it.nombre.contains(filtro, ignoreCase = true) ||
-                            it.nivel.toString() == filtro
-                }
-                adapter?.setWorkouts(filtrados)
-            }
-        }*/
+        /*     btnFilter.setOnClickListener {
+                 val filtro = editTextFilter.text.toString().trim()
+                 if (filtro.isEmpty()) {
+                     adapter?.setWorkouts(workouts)
+                 } else {
+                     val filtrados = workouts.filter {
+                         it.nombre.contains(filtro, ignoreCase = true) ||
+                                 it.nivel.toString() == filtro
+                     }
+                     adapter?.setWorkouts(filtrados)
+                 }
+             }*/
         // Ir a perfil de usuario
         imageViewProfile.setOnClickListener {
             val intent = Intent(this, Profile::class.java)
@@ -99,7 +105,8 @@ class Trainer : AppCompatActivity() {
         for (i in 0..(usuario.nivel)) {
             niveles.add(i.toString())
         }
-        val adapterSpinner = android.widget.ArrayAdapter(this, android.R.layout.simple_spinner_item, niveles)
+        val adapterSpinner =
+            android.widget.ArrayAdapter(this, android.R.layout.simple_spinner_item, niveles)
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerNivel.adapter = adapterSpinner
 
@@ -129,26 +136,34 @@ class Trainer : AppCompatActivity() {
     private fun cargarWorkouts() {
         val db = FirebaseFirestore.getInstance()
         db.collection("workouts").get().addOnSuccessListener { result ->
-            workouts.clear()
+            val workoutsTemp =
+                mutableListOf<Workout>() // lista temporal para evitar problemas de concurrencia al actualizar el adapter
             for (doc in result) {
                 val data = doc.data
                 val nombre = data["nombre"] as? String ?: ""
                 val nivel = (data["nivel"] as? Long)?.toInt() ?: 0
                 val numEjercicio = (data["numEjercicio"] as? Long)?.toInt() ?: 0
                 val videoUrl = data["videoUrl"] as? String ?: ""
-                val ejerciciosRefs = data["ejercicios"] as? List<*>
-                val ejerciciosIds = ejerciciosRefs?.mapNotNull { (it as? com.google.firebase.firestore.DocumentReference)?.id } ?: emptyList()
+                val ejerciciosRefs = data["ejercicios"] as? List<*> ?: emptyList<Any>()
+                val ejerciciosDocumentRefs = ejerciciosRefs.mapNotNull { ref ->
+                    if (ref is DocumentReference) {
+                        ref
+                    } else {
+                        null
+                    }
+                }
 
                 val workout = Workout(
                     nombre = nombre,
                     nivel = nivel,
-                    ejerciciosTotales = ejerciciosIds,
+                    ejerciciosTotales = ejerciciosDocumentRefs,
                     numEjercicio = numEjercicio,
                     videoUrl = videoUrl
                 )
-                workouts.add(workout)
+                workoutsTemp.add(workout)
+                Toast.makeText(this, "Workout cargado: $nombre", Toast.LENGTH_SHORT).show()
             }
-            adapter?.setWorkouts(workouts)
+            adapter?.setWorkouts(workoutsTemp)
         }.addOnFailureListener {
             Toast.makeText(this, "Error al cargar workouts", Toast.LENGTH_SHORT).show()
         }
@@ -157,7 +172,7 @@ class Trainer : AppCompatActivity() {
     // Guardar un nuevo workout en Firestore
     private fun guardarWorkoutEnFirestore(workout: Workout) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("workouts").document(workout.nombre).set(workout)
+        db.collection("workouts").document().set(workout)
             .addOnSuccessListener {
                 cargarWorkouts() // Recarga la lista completa desde Firestore
                 Toast.makeText(this, "Workout añadido", Toast.LENGTH_SHORT).show()

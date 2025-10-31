@@ -2,6 +2,8 @@ package com.example.spinningcat.room.converter
 
 import androidx.room.TypeConverter
 import com.example.spinningcat.room.entities.Serie
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson
 import java.util.ArrayList
@@ -45,5 +47,20 @@ class Converters {
         if (value.isNullOrEmpty()) return ArrayList()
         val listType = object : TypeToken<ArrayList<Serie>>() {}.type
         return gson.fromJson(value, listType)
+    }
+
+    // Convertir List<DocumentReference> a List<String> (paths)
+    @TypeConverter
+    fun fromDocumentReferenceList(refs: List<DocumentReference>?): String {
+        val paths = refs?.map { it.path } ?: emptyList()
+        return gson.toJson(paths)
+    }
+
+    @TypeConverter
+    fun toDocumentReferenceList(value: String): List<DocumentReference> {
+        val listType = object : TypeToken<List<String>>() {}.type
+        val paths: List<String> = gson.fromJson(value, listType) ?: emptyList()
+        val db = FirebaseFirestore.getInstance()
+        return paths.map { path -> db.document(path) }
     }
 }

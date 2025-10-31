@@ -5,6 +5,7 @@ package com.example.spinningcat.adapter
     Aquí se implementan los métodos necesarios para añadir, editar,
     eliminar y listar los workouts en la interfaz de usuario.
  */
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class TrainerWorkoutAdapter(
         val workout = workouts[position]
         holder.txtNombre.text = workout.nombre
         holder.txtNivel.text = "Nivel: ${workout.nivel}"
+        holder.txtNombre.text = Html.fromHtml("<i>${workout.nombre.replace("_", "")}</i>")
 
         // Mostrar ejercicios y número de ejercicios
 
@@ -76,10 +78,10 @@ class TrainerWorkoutAdapter(
         workouts.add(workout)
         notifyItemInserted(workouts.size - 1)
     }
-
+    // busca el workout por id y lo elimina, llama a notifyItemRemoved paa que el recyclerview se actualice
     fun removeWorkout(workout: Workout) {
-        val index = workouts.indexOf(workout)
-        if (index >= 0) {
+        val index = workouts.indexOfFirst { it.id == workout.id }
+        if (index != -1) {
             workouts.removeAt(index)
             notifyItemRemoved(index)
         }

@@ -8,6 +8,7 @@ import java.io.Serializable
 @Entity(tableName = "t_workout")
 data class Workout(
     @PrimaryKey(autoGenerate = false)
+    var id: String = "",
     var nombre: String = "",
     var nivel: Int = 0,
     var ejerciciosCompletado: List<String> = listOf(),

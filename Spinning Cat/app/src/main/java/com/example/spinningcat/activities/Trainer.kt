@@ -21,6 +21,7 @@ import android.widget.TextView
 import com.google.firebase.firestore.DocumentReference
 import kotlin.text.clear
 import kotlin.text.get
+import kotlin.text.set
 
 class Trainer : AppCompatActivity() {
 
@@ -140,6 +141,7 @@ class Trainer : AppCompatActivity() {
                 mutableListOf<Workout>() // lista temporal para evitar problemas de concurrencia al actualizar el adapter
             for (doc in result) {
                 val data = doc.data
+                val id = doc.id
                 val nombre = data["nombre"] as? String ?: ""
                 val nivel = (data["nivel"] as? Long)?.toInt() ?: 0
                 val numEjercicio = (data["numEjercicio"] as? Long)?.toInt() ?: 0
@@ -154,6 +156,7 @@ class Trainer : AppCompatActivity() {
                 }
 
                 val workout = Workout(
+                    id = id,
                     nombre = nombre,
                     nivel = nivel,
                     ejerciciosTotales = ejerciciosDocumentRefs,
@@ -171,9 +174,11 @@ class Trainer : AppCompatActivity() {
     // Guardar un nuevo workout en Firestore
     private fun guardarWorkoutEnFirestore(workout: Workout) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("workouts").document().set(workout)
+        val docRef = db.collection("workouts").document()
+        workout.id = docRef.id // Asigna el ID generado al workout
+        docRef.set(workout)
             .addOnSuccessListener {
-                cargarWorkouts() // Recarga la lista completa desde Firestore
+                cargarWorkouts()
                 Toast.makeText(this, "Workout añadido", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
@@ -183,11 +188,10 @@ class Trainer : AppCompatActivity() {
 
     // Modificar un workout (aún no funcional)
     private fun modificarWorkout(workout: Workout) {
-        // Aquí deberías mostrar un diálogo de edición
-        // Por simplicidad, se cambia solo el nombre (puedes expandirlo)
-        workout.nombre = "Modificado"
+        // Mostrar un Toast y modificar el nombre como ejemplo
+        workout.nombre = "_${workout.nombre} Modificado_"
         val db = FirebaseFirestore.getInstance()
-        db.collection("workouts").document(workout.nombre).set(workout)
+        db.collection("workouts").document(workout.id).set(workout)
             .addOnSuccessListener {
                 adapter?.updateWorkout(workout)
                 Toast.makeText(this, "Workout modificado", Toast.LENGTH_SHORT).show()
@@ -200,7 +204,11 @@ class Trainer : AppCompatActivity() {
     // Eliminar un workout
     private fun eliminarWorkout(workout: Workout) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("workouts").document(workout.nombre).delete()
+        if (workout.id.isNullOrEmpty()) {
+            Toast.makeText(this, "Error: ID de workout no válido", Toast.LENGTH_SHORT).show()
+            return
+        }
+        db.collection("workouts").document(workout.id).delete()
             .addOnSuccessListener {
                 workouts.remove(workout)
                 adapter?.removeWorkout(workout)

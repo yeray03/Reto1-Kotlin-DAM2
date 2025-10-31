@@ -11,10 +11,10 @@ import com.example.spinningcat.R
 import com.example.spinningcat.adapter.WorkoutsAdapter
 import com.example.spinningcat.room.entities.WorkoutHistoryItem
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.toString
 
 class Workouts : AppCompatActivity() {
     private var filterEditText: EditText? = null
-    private var filterButton: Button? = null
     private var profileButton: Button? = null
     private var trainerButton: Button? = null
     private var backButton: Button? = null
@@ -28,12 +28,16 @@ class Workouts : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workouts)
-
+        // Referencias a vistas
+        val spinnerNivel = findViewById<Spinner>(R.id.spinnerNivel)
+        val niveles: ArrayList<String> = arrayListOf("Default")
+        for (i in 0..userLevel) {
+            niveles.add(i.toString())
+        }
+        spinnerNivel.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, niveles)
         nickname = intent.getStringExtra("nickname") ?: ""
 
         val userLevelLabel = findViewById<TextView>(R.id.userLevelLabel)
-        filterEditText = findViewById(R.id.filterEditText)
-        filterButton = findViewById(R.id.filterButton)
         profileButton = findViewById(R.id.profileButton)
         trainerButton = findViewById(R.id.btnGoback)
         backButton = findViewById(R.id.btnGoback)
@@ -51,13 +55,16 @@ class Workouts : AppCompatActivity() {
 
         cargarHistorialFirestore()
 
-        filterButton?.setOnClickListener {
-            val nivel = filterEditText?.text?.toString()?.toIntOrNull()
-            if (nivel != null) {
-                filtrarPorNivel(nivel)
-            } else {
-                Toast.makeText(this, "Introduce un nivel válido", Toast.LENGTH_SHORT).show()
+        spinnerNivel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val nivelSeleccionado = niveles[position]
+                if (nivelSeleccionado != "Default") {
+                    filtrarPorNivel(nivelSeleccionado.toInt())
+                } else {
+                    adapter.actualizarLista(workoutsList)
+                }
             }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
         profileButton?.setOnClickListener {
@@ -88,14 +95,15 @@ class Workouts : AppCompatActivity() {
         dbFirestore.collection("usuarios")
             .document(nickname) // ID documento = nickname
             .collection("historico")
+
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val workout = WorkoutHistoryItem(
                         nombre = document.getString("workoutNombre") ?: "",
                         nivel = document.getLong("nivel")?.toInt() ?: 0,
-                        tiempoTotal = document.getString("tiempoTotal") ?: "",
-                        tiempoPrevisto = document.getString("tiempoPrevisto") ?: "",
+                        tiempoTotal = document.getLong("tiempoTotal") ?: 0L,
+                        tiempoPrevisto = document.getLong("tiempoPrevisto") ?: 0L,
                         fecha = document.getString("fecha") ?: "",
                         porcentajeCompletado = document.getLong("porcentajeCompletado")?.toInt() ?: 0,
                         videoUrl = document.getString("videoUrl") ?: ""

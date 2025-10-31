@@ -13,8 +13,8 @@ data class WorkoutHistoryItem(
     var id: String = "",
     var nombre: String = "",
     var nivel: Int = 0,
-    var tiempoTotal: String = "",
-    var tiempoPrevisto: String = "",
+    var tiempoTotal: Long = 0,
+    var tiempoPrevisto: Long = 0,
     var fecha: String = "",
     var porcentajeCompletado: Int = 0,
     var videoUrl: String = ""

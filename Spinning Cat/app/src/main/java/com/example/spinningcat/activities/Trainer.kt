@@ -161,7 +161,6 @@ class Trainer : AppCompatActivity() {
                     videoUrl = videoUrl
                 )
                 workoutsTemp.add(workout)
-                Toast.makeText(this, "Workout cargado: $nombre", Toast.LENGTH_SHORT).show()
             }
             adapter?.setWorkouts(workoutsTemp)
         }.addOnFailureListener {

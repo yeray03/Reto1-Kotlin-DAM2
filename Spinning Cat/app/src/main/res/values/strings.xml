@@ -69,6 +69,7 @@
     <string name="ejsTotales">Exercises</string>
     <string name="porcentaje">Finished percentage</string>
     <string name="entrenador">Trainer</string>
+    <string name="logout">Log out</string>
 
 
 </resources>

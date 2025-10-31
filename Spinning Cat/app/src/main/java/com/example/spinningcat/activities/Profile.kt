@@ -3,6 +3,7 @@ package com.example.spinningcat.activities
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -23,6 +24,7 @@ import com.example.spinningcat.room.entities.User
 import java.util.Calendar
 import java.util.Locale
 import androidx.core.content.edit
+import com.example.spinningcat.MainActivity
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class Profile : AppCompatActivity() {
@@ -135,6 +137,14 @@ class Profile : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(
                 if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
             )
+        }
+
+        //CERRAR SESION
+        val btnCerrarSesion: Button = findViewById(R.id.btnCerrarSesion)
+        btnCerrarSesion.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

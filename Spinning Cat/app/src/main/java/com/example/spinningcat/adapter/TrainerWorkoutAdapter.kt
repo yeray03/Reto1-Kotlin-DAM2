@@ -1,73 +1,87 @@
 package com.example.spinningcat.adapter
 
-/*
-    Clase adaptadora para gestionar los workouts de los entrenadores.
-    Aquí se implementan los métodos necesarios para añadir, editar,
-    eliminar y listar los workouts en la interfaz de usuario.
- */
+import android.content.Intent
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spinningcat.R
+import com.example.spinningcat.activities.EjercicioDetail
 import com.example.spinningcat.room.entities.Workout
 
 class TrainerWorkoutAdapter(
     private var workouts: MutableList<Workout>,
     private val onModificar: (Workout) -> Unit,
-    private val onEliminar: (Workout) -> Unit,
-    private val onReproducir: (String) -> Unit
+    private val onEliminar: (Workout) -> Unit
 ) : RecyclerView.Adapter<TrainerWorkoutAdapter.WorkoutViewHolder>() {
 
-    // Clase ViewHolder normal (no inner)
     class WorkoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtNombre = itemView.findViewById<TextView>(R.id.txtNombre)
         val txtNivel = itemView.findViewById<TextView>(R.id.txtNivel)
-        val txtVideo = itemView.findViewById<TextView>(R.id.txtVideo)
-        val imgVideo = itemView.findViewById<ImageView>(R.id.imgVideo)
+        val btnVerEjercicios = itemView.findViewById<Button>(R.id.btnVerEjercicios)
         val btnModificar = itemView.findViewById<Button>(R.id.btnModificar)
         val btnEliminar = itemView.findViewById<Button>(R.id.btnEliminar)
     }
-    // Métodos del adaptador
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_workout_trainer, parent, false)
         return WorkoutViewHolder(view)
     }
-    // Vincula los datos del workout a la vista
+
     override fun onBindViewHolder(holder: WorkoutViewHolder, position: Int) {
         val workout = workouts[position]
-        holder.txtNombre.text = workout.nombre
-        holder.txtNivel.text = "Nivel: ${workout.nivel}"
         holder.txtNombre.text = Html.fromHtml("<i>${workout.nombre.replace("_", "")}</i>")
+        holder.txtNivel.text = "Nivel: ${workout.nivel}"
 
-        // Mostrar ejercicios y número de ejercicios
-
-        // Mostrar vídeo si existe
-        if (!workout.videoUrl.isNullOrBlank()) {
-            holder.txtVideo.visibility = View.VISIBLE
-            holder.imgVideo.visibility = View.VISIBLE
-            holder.txtVideo.text = "Ver vídeo"
-            holder.txtVideo.setOnClickListener { onReproducir(workout.videoUrl!!) }
-            holder.imgVideo.setOnClickListener { onReproducir(workout.videoUrl!!) }
-        } else {
-            holder.txtVideo.visibility = View.GONE
-            holder.imgVideo.visibility = View.GONE
+        // ✅ Botón "Ver Ejercicios" abre WorkoutDetailActivity
+        holder.btnVerEjercicios.setOnClickListener {
+            val intent = Intent(holder.itemView.context, EjercicioDetail::class.java)
+            intent.putExtra("WORKOUT_NOMBRE", workout.nombre)
+            intent.putExtra("WORKOUT_NIVEL", workout.nivel)
+            intent.putExtra("WORKOUT_TIEMPO_TOTAL", parseTiempo(workout.tiempoTotal))
+            intent.putExtra("WORKOUT_TIEMPO_PREVISTO", parseTiempo(workout.tiempoPrevisto))
+            intent.putExtra("WORKOUT_FECHA", "") // No hay fecha en trainer
+            intent.putExtra("WORKOUT_PORCENTAJE", workout.porcentajeCompletado)
+            intent.putExtra("WORKOUT_VIDEO_URL", workout.videoUrl)
+            holder.itemView.context.startActivity(intent)
         }
 
         holder.btnModificar.setOnClickListener { onModificar(workout) }
         holder.btnEliminar.setOnClickListener { onEliminar(workout) }
     }
 
-    override fun getItemCount(): Int {
-        return workouts.size
+    override fun getItemCount(): Int = workouts.size
+
+    // ✅ Función auxiliar para convertir String a Long (segundos)
+    private fun parseTiempo(tiempo: String): Long {
+        if (tiempo.isEmpty()) return 0L
+
+        return try {
+            val parts = tiempo.split(":")
+            when (parts.size) {
+                3 -> { // HH:MM:SS
+                    val hours = parts[0].toLongOrNull() ?: 0L
+                    val minutes = parts[1].toLongOrNull() ?: 0L
+                    val seconds = parts[2].toLongOrNull() ?: 0L
+                    hours * 3600 + minutes * 60 + seconds
+                }
+                2 -> { // MM:SS
+                    val minutes = parts[0].toLongOrNull() ?: 0L
+                    val seconds = parts[1].toLongOrNull() ?: 0L
+                    minutes * 60 + seconds
+                }
+                else -> 0L
+            }
+        } catch (e: Exception) {
+            0L
+        }
     }
 
-    // Métodos para actualizar la lista
+    // Métodos existentes (sin cambios)
     fun setWorkouts(newList: List<Workout>) {
         workouts.clear()
         workouts.addAll(newList)
@@ -78,7 +92,7 @@ class TrainerWorkoutAdapter(
         workouts.add(workout)
         notifyItemInserted(workouts.size - 1)
     }
-    // busca el workout por id y lo elimina, llama a notifyItemRemoved paa que el recyclerview se actualice
+
     fun removeWorkout(workout: Workout) {
         val index = workouts.indexOfFirst { it.id == workout.id }
         if (index != -1) {

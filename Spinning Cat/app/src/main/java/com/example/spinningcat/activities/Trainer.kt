@@ -54,7 +54,6 @@ class Trainer : AppCompatActivity() {
             workouts, // Pasar la lista mutable vacía
             onModificar = { workout -> modificarWorkout(workout) },
             onEliminar = { workout -> eliminarWorkout(workout) },
-            onReproducir = { url -> reproducirVideo(url) }
         )
         recyclerWorkouts.layoutManager = LinearLayoutManager(this)
         recyclerWorkouts.adapter = adapter

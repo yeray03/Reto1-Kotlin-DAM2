@@ -18,6 +18,7 @@
     <string name="tvDate">Fecha de nacimiento:</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
+    <string name="filtrar">Filtrar</string>
     <string name="login2">Iniciar sesión</string>
     <string name="remember_me">Recuerdame</string>
     <string name="client">Cliente</string>
@@ -69,4 +70,5 @@
     <string name="porcentaje">Porcentaje completado</string>
     <string name="entrenador">Entrenador</string>
     <string name="logout">Cerrar sesión</string>
+    <string name="logo_gimnasio">Logo del gimnasio</string>
 </resources>

@@ -18,7 +18,7 @@
     <string name="tvDate">Birthdate:</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="filtrar" tools:ignore="MissingTranslation">Filtrar</string>
+    <string name="filtrar" tools:ignore="MissingTranslation">Filtrate</string>
     <string name="login2">Log in</string>
     <string name="remember_me">Remember me</string>
     <string name="client">Client</string>
@@ -70,6 +70,7 @@
     <string name="porcentaje">Finished percentage</string>
     <string name="entrenador">Trainer</string>
     <string name="logout">Log out</string>
+    <string name="logo_gimnasio">Gym logo</string>
 
 
 </resources>

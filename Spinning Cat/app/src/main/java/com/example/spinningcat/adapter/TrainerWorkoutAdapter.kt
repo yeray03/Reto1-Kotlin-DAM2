@@ -37,14 +37,14 @@ class TrainerWorkoutAdapter(
         holder.txtNombre.text = Html.fromHtml("<i>${workout.nombre.replace("_", "")}</i>")
         holder.txtNivel.text = "Nivel: ${workout.nivel}"
 
-        // ✅ Botón "Ver Ejercicios" abre WorkoutDetailActivity
+        // Botón "Ver Ejercicios" abre EjercicioDetail
         holder.btnVerEjercicios.setOnClickListener {
             val intent = Intent(holder.itemView.context, EjercicioDetail::class.java)
             intent.putExtra("WORKOUT_NOMBRE", workout.nombre)
             intent.putExtra("WORKOUT_NIVEL", workout.nivel)
             intent.putExtra("WORKOUT_TIEMPO_TOTAL", parseTiempo(workout.tiempoTotal))
-            intent.putExtra("WORKOUT_TIEMPO_PREVISTO", parseTiempo(workout.tiempoPrevisto))
-            intent.putExtra("WORKOUT_FECHA", "") // No hay fecha en trainer
+            intent.putExtra("WORKOUT_TIEMPO_PREVISTO", workout.tiempoPrevisto) // ✅ Pasar como String
+            intent.putExtra("WORKOUT_FECHA", "")
             intent.putExtra("WORKOUT_PORCENTAJE", workout.porcentajeCompletado)
             intent.putExtra("WORKOUT_VIDEO_URL", workout.videoUrl)
             holder.itemView.context.startActivity(intent)
@@ -56,7 +56,7 @@ class TrainerWorkoutAdapter(
 
     override fun getItemCount(): Int = workouts.size
 
-    // ✅ Función auxiliar para convertir String a Long (segundos)
+    // Función auxiliar para convertir String a Long (segundos)
     private fun parseTiempo(tiempo: String): Long {
         if (tiempo.isEmpty()) return 0L
 
@@ -81,7 +81,6 @@ class TrainerWorkoutAdapter(
         }
     }
 
-    // Métodos existentes (sin cambios)
     fun setWorkouts(newList: List<Workout>) {
         workouts.clear()
         workouts.addAll(newList)

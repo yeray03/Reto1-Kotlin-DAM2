@@ -15,7 +15,11 @@ import com.example.spinningcat.room.entities.RememberedUser
 import com.example.spinningcat.room.entities.User
 import com.example.spinningcat.room.entities.Workout
 
-@Database(entities = [User::class, Workout::class, Ejercicio::class, RememberedUser::class], version = 1)
+@Database(
+    entities = [User::class, Workout::class, Ejercicio::class, RememberedUser::class],
+    version = 2,
+    exportSchema = false
+)
 @TypeConverters(Converters::class)
 abstract class RoomDB : RoomDatabase() {
 
@@ -29,13 +33,15 @@ abstract class RoomDB : RoomDatabase() {
             instance?:buildDatabase (context).also { instance = it}
         }
 
-        private fun buildDatabase (context: Context) = Room.databaseBuilder(context,
+        private fun buildDatabase (context: Context) = Room.databaseBuilder(
+            context,
             RoomDB::class.java,
-            "myDataBase")
+            "myDataBase"
+        )
+            .fallbackToDestructiveMigration()
             .build()
     }
 
-    // funciones para poder recoger las entidades y poder usar sus funciones internas
     abstract fun getUserDao() : UsuarioDao
     abstract fun getWorkoutDao() : WorkoutDao
     abstract fun getEjercicioDao() : EjercicioDao

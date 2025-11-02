@@ -67,7 +67,7 @@ class EjercicioDetail : AppCompatActivity() {
         val workoutNombre = intent.getStringExtra("WORKOUT_NOMBRE") ?: ""
         val nivel = intent.getIntExtra("WORKOUT_NIVEL", 0)
         val tiempoTotal = intent.getLongExtra("WORKOUT_TIEMPO_TOTAL", 0)
-        val tiempoPrevisto = intent.getLongExtra("WORKOUT_TIEMPO_PREVISTO", 0)
+        val tiempoPrevisto = intent.getStringExtra("WORKOUT_TIEMPO_PREVISTO") ?: "00:00"
         val fecha = intent.getStringExtra("WORKOUT_FECHA") ?: ""
         val porcentaje = intent.getIntExtra("WORKOUT_PORCENTAJE", 0)
         videoUrl = intent.getStringExtra("WORKOUT_VIDEO_URL") ?: ""
@@ -75,13 +75,32 @@ class EjercicioDetail : AppCompatActivity() {
         tvWorkoutNombre.text = workoutNombre
         tvNivel.text = "Nivel: $nivel"
         tvTiempoTotal.text = "Tiempo Total: ${formatTime(tiempoTotal)}"
-        tvTiempoPrevisto.text = "Tiempo Previsto: ${formatTime(tiempoPrevisto)}"
+        tvTiempoPrevisto.text = "Tiempo Previsto: $tiempoPrevisto"
         tvFecha.text = if (fecha.isNotEmpty()) "Fecha: $fecha" else ""
         tvPorcentaje.text = "Completado: $porcentaje%"
 
         btnReproducirVideo.visibility = if (videoUrl.isNotEmpty()) View.VISIBLE else View.GONE
 
+        // Cargar workout desde Firebase para obtener tiempo previsto actualizado
+        cargarWorkoutDesdeFirebase(workoutNombre)
+
         loadEjercicios(workoutNombre)
+    }
+
+    private fun cargarWorkoutDesdeFirebase(workoutNombre: String) {
+        db.collection("workouts")
+            .whereEqualTo("nombre", workoutNombre)
+            .get()
+            .addOnSuccessListener { workoutDocs ->
+                if (!workoutDocs.isEmpty) {
+                    val workoutDoc = workoutDocs.documents[0]
+                    val tiempoPrevisto = workoutDoc.getString("tiempoPrevisto") ?: "00:00"
+                    tvTiempoPrevisto.text = "Tiempo Previsto: $tiempoPrevisto"
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error al cargar tiempo previsto: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun loadEjercicios(workoutNombre: String) {
@@ -96,8 +115,8 @@ class EjercicioDetail : AppCompatActivity() {
 
                 val workoutDoc = workoutDocs.documents[0]
 
-                // ✅ Buscar "ejerciciosTotales" (con T mayúscula)
-                val ejerciciosRefs = workoutDoc.get("ejerciciosTotales") as? List<*>
+                // Buscar campo correcto: ejercicios
+                val ejerciciosRefs = workoutDoc.get("ejercicios") as? List<*>
 
                 if (ejerciciosRefs.isNullOrEmpty()) {
                     Toast.makeText(this, "Este workout no tiene ejercicios", Toast.LENGTH_SHORT).show()
@@ -191,6 +210,4 @@ class EjercicioDetail : AppCompatActivity() {
             String.format("%02d:%02d", minutes, secs)
         }
     }
-
-
 }

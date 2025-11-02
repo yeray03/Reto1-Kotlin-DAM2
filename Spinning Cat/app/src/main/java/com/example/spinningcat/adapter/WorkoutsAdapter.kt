@@ -34,36 +34,43 @@ class WorkoutsAdapter(private var workouts: List<WorkoutHistoryItem>) :
         val item = workouts[position]
         holder.nombre.text = item.nombre
         holder.nivel.text = "Nivel: ${item.nivel}"
-        holder.tiempoTotal.text = "Tiempo total: ${item.tiempoTotal}"
-        holder.tiempoPrevisto.text = "Tiempo previsto: ${item.tiempoPrevisto}"
+        holder.tiempoTotal.text = "Tiempo total: ${formatearTiempo(item.tiempoTotal)}"
+        holder.tiempoPrevisto.text = "Tiempo previsto: ${formatearTiempo(item.tiempoPrevisto)}"
         holder.fecha.text = "Fecha: ${item.fecha}"
         holder.porcentaje.text = "% Completados: ${item.porcentajeCompletado}"
 
-        // ✅ Click en el item abre el detalle
+        // Click en el item abre el detalle
         holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, EjercicioDetail::class.java)
-            intent.putExtra("WORKOUT_NOMBRE", item.nombre)
-            intent.putExtra("WORKOUT_NIVEL", item.nivel)
-            intent.putExtra("WORKOUT_TIEMPO_TOTAL", item.tiempoTotal)
-            intent.putExtra("WORKOUT_TIEMPO_PREVISTO", item.tiempoPrevisto)
-            intent.putExtra("WORKOUT_FECHA", item.fecha)
-            intent.putExtra("WORKOUT_PORCENTAJE", item.porcentajeCompletado)
-            intent.putExtra("WORKOUT_VIDEO_URL", item.videoUrl)
-            holder.itemView.context.startActivity(intent)
+            abrirDetalle(holder, item)
         }
 
-        // ✅ El botón ahora dice "Ver Detalle"
+        // El botón ahora dice "Ver Detalle"
         holder.videoButton.text = "Ver Detalle"
         holder.videoButton.setOnClickListener {
-            val intent = Intent(holder.itemView.context, EjercicioDetail::class.java)
-            intent.putExtra("WORKOUT_NOMBRE", item.nombre)
-            intent.putExtra("WORKOUT_NIVEL", item.nivel)
-            intent.putExtra("WORKOUT_TIEMPO_TOTAL", item.tiempoTotal)
-            intent.putExtra("WORKOUT_TIEMPO_PREVISTO", item.tiempoPrevisto)
-            intent.putExtra("WORKOUT_FECHA", item.fecha)
-            intent.putExtra("WORKOUT_PORCENTAJE", item.porcentajeCompletado)
-            intent.putExtra("WORKOUT_VIDEO_URL", item.videoUrl)
-            holder.itemView.context.startActivity(intent)
+            abrirDetalle(holder, item)
+        }
+    }
+
+    private fun abrirDetalle(holder: WorkoutViewHolder, item: WorkoutHistoryItem) {
+        val intent = Intent(holder.itemView.context, EjercicioDetail::class.java)
+        intent.putExtra("WORKOUT_NOMBRE", item.nombre)
+        intent.putExtra("WORKOUT_NIVEL", item.nivel)
+        intent.putExtra("WORKOUT_TIEMPO_TOTAL", item.tiempoTotal)
+        intent.putExtra("WORKOUT_TIEMPO_PREVISTO", formatearTiempo(item.tiempoPrevisto)) // ✅ Convertir a String
+        intent.putExtra("WORKOUT_FECHA", item.fecha)
+        intent.putExtra("WORKOUT_PORCENTAJE", item.porcentajeCompletado)
+        intent.putExtra("WORKOUT_VIDEO_URL", item.videoUrl)
+        holder.itemView.context.startActivity(intent)
+    }
+
+    private fun formatearTiempo(segundos: Long): String {
+        val horas = segundos / 3600
+        val minutos = (segundos % 3600) / 60
+        val segs = segundos % 60
+        return if (horas > 0) {
+            String.format("%02d:%02d:%02d", horas, minutos, segs)
+        } else {
+            String.format("%02d:%02d", minutos, segs)
         }
     }
 

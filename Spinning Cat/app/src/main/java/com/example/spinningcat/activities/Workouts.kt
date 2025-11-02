@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spinningcat.R
 import com.example.spinningcat.adapter.WorkoutsAdapter
+import com.example.spinningcat.room.entities.User
 import com.example.spinningcat.room.entities.WorkoutHistoryItem
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.toString
 
 class Workouts : AppCompatActivity() {
     private var filterEditText: EditText? = null
@@ -19,32 +19,36 @@ class Workouts : AppCompatActivity() {
     private var trainerButton: Button? = null
     private var backButton: Button? = null
     private var workoutsRecyclerView: RecyclerView? = null
-    private lateinit var adapter: WorkoutsAdapter // No es nullable, usamos lateinit porque
+    private lateinit var adapter: WorkoutsAdapter
     private var nickname: String = ""
     private var isTrainer = false
     private var userLevel = 1
     private val workoutsList = mutableListOf<WorkoutHistoryItem>()
+    private var usuario: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workouts)
-        // Referencias a vistas
+
+        val extras = intent.extras
+        usuario = extras?.getSerializable("usuario") as? User
+
+        nickname = usuario?.nickname ?: intent.getStringExtra("nickname") ?: ""
+        userLevel = usuario?.nivel ?: intent.getIntExtra("userLevel", 1)
+        isTrainer = usuario?.tipoUsuario == 1
+
         val spinnerNivel = findViewById<Spinner>(R.id.spinnerNivel)
         val niveles: ArrayList<String> = arrayListOf("Default")
         for (i in 0..userLevel) {
             niveles.add(i.toString())
         }
         spinnerNivel.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, niveles)
-        nickname = intent.getStringExtra("nickname") ?: ""
 
         val userLevelLabel = findViewById<TextView>(R.id.userLevelLabel)
         profileButton = findViewById(R.id.profileButton)
         trainerButton = findViewById(R.id.btnGoback)
         backButton = findViewById(R.id.btnGoback)
         workoutsRecyclerView = findViewById(R.id.workoutsRecyclerView)
-
-        isTrainer = intent.getBooleanExtra("isTrainer", false)
-        userLevel = intent.getIntExtra("userLevel", 1)
 
         userLevelLabel.text = "Nivel del usuario: $userLevel"
         trainerButton?.visibility = if (isTrainer) View.VISIBLE else View.GONE
@@ -69,8 +73,8 @@ class Workouts : AppCompatActivity() {
 
         profileButton?.setOnClickListener {
             val intent = Intent (this, Profile::class.java)
+            intent.putExtra("usuario", usuario)
             startActivity(intent)
-            Toast.makeText(this, "Ir a Perfil", Toast.LENGTH_SHORT).show()
         }
 
         trainerButton?.setOnClickListener {
@@ -86,39 +90,91 @@ class Workouts : AppCompatActivity() {
 
     private fun cargarHistorialFirestore() {
         workoutsList.clear()
-        // nickname es el id de documento
+
         if (nickname.isBlank()) {
             Toast.makeText(this, "Error: usuario no válido", Toast.LENGTH_SHORT).show()
             return
         }
+
         val dbFirestore = FirebaseFirestore.getInstance()
         dbFirestore.collection("usuarios")
-            .document(nickname) // ID documento = nickname
+            .document(nickname)
             .collection("historico")
-
             .get()
             .addOnSuccessListener { result ->
+                if (result.isEmpty) {
+                    Toast.makeText(this, "No hay históricos", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
+
                 for (document in result) {
+                    val workoutNombre = document.getString("workoutNombre") ?: ""
+
+                    // Lee tiempoPrevisto como número (Long)
+                    val tiempoPrevisto = document.getLong("tiempoPrevisto") ?: 0L
+
                     val workout = WorkoutHistoryItem(
-                        nombre = document.getString("workoutNombre") ?: "",
+                        nombre = workoutNombre,
                         nivel = document.getLong("nivel")?.toInt() ?: 0,
                         tiempoTotal = document.getLong("tiempoTotal") ?: 0L,
-                        tiempoPrevisto = document.getLong("tiempoPrevisto") ?: 0L,
+                        tiempoPrevisto = tiempoPrevisto,
                         fecha = document.getString("fecha") ?: "",
                         porcentajeCompletado = document.getLong("porcentajeCompletado")?.toInt() ?: 0,
                         videoUrl = document.getString("videoUrl") ?: ""
                     )
+
                     workoutsList.add(workout)
                 }
+
                 workoutsList.sortByDescending { it.fecha }
                 adapter.actualizarLista(workoutsList)
-                if (workoutsList.isEmpty()) {
-                    Toast.makeText(this, "No hay históricos", Toast.LENGTH_SHORT).show()
-                }
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Error al cargar históricos", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun obtenerTiempoPrevistoDeWorkout(workoutNombre: String, callback: (Long) -> Unit) {
+        val dbFirestore = FirebaseFirestore.getInstance()
+        dbFirestore.collection("workouts")
+            .whereEqualTo("nombre", workoutNombre)
+            .get()
+            .addOnSuccessListener { result ->
+                if (!result.isEmpty) {
+                    val doc = result.documents[0]
+                    val tiempoPrevistoStr = doc.getString("tiempoPrevisto") ?: ""
+                    callback(parseTiempoASegundos(tiempoPrevistoStr))
+                } else {
+                    callback(0L)
+                }
+            }
+            .addOnFailureListener {
+                callback(0L)
+            }
+    }
+
+    private fun parseTiempoASegundos(tiempo: String): Long {
+        if (tiempo.isEmpty()) return 0L
+
+        return try {
+            val parts = tiempo.split(":")
+            when (parts.size) {
+                3 -> {
+                    val hours = parts[0].toLongOrNull() ?: 0L
+                    val minutes = parts[1].toLongOrNull() ?: 0L
+                    val seconds = parts[2].toLongOrNull() ?: 0L
+                    hours * 3600 + minutes * 60 + seconds
+                }
+                2 -> {
+                    val minutes = parts[0].toLongOrNull() ?: 0L
+                    val seconds = parts[1].toLongOrNull() ?: 0L
+                    minutes * 60 + seconds
+                }
+                else -> 0L
+            }
+        } catch (e: Exception) {
+            0L
+        }
     }
 
     private fun filtrarPorNivel(nivel: Int) {
@@ -126,4 +182,3 @@ class Workouts : AppCompatActivity() {
         adapter?.actualizarLista(filtrados)
     }
 }
-

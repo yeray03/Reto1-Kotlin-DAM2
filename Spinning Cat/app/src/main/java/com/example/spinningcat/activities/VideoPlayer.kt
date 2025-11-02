@@ -1,32 +1,36 @@
 package com.example.spinningcat.activities
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.spinningcat.R
 
 class VideoPlayer : AppCompatActivity() {
 
-    private lateinit var webView: WebView
     private lateinit var tvWorkoutName: TextView
+    private lateinit var tvInstrucciones: TextView
+    private lateinit var btnAbrirYoutube: Button
     private lateinit var btnVolver: Button
+    private lateinit var ivIcono: ImageView
+    private var videoUrl = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
 
-        webView = findViewById(R.id.webView)
         tvWorkoutName = findViewById(R.id.tvWorkoutName)
+        tvInstrucciones = findViewById(R.id.tvInstrucciones)
+        btnAbrirYoutube = findViewById(R.id.btnAbrirYoutube)
         btnVolver = findViewById(R.id.btnVolver)
+        ivIcono = findViewById(R.id.ivIcono)
 
         // Obtener datos del intent
-        val videoUrl = intent.getStringExtra("VIDEO_URL") ?: ""
+        videoUrl = intent.getStringExtra("VIDEO_URL") ?: ""
         val workoutName = intent.getStringExtra("WORKOUT_NAME") ?: "Video"
 
         tvWorkoutName.text = workoutName
@@ -37,67 +41,42 @@ class VideoPlayer : AppCompatActivity() {
             return
         }
 
-        // Configurar WebView
-        setupWebView(videoUrl)
+        // Boton abrir en YouTube
+        btnAbrirYoutube.setOnClickListener {
+            abrirEnYoutube(videoUrl)
+        }
 
-        // Botón volver
+        // Boton volver
         btnVolver.setOnClickListener {
             finish()
         }
-
-        // ✅ Manejar el botón back con OnBackPressedDispatcher
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (webView.canGoBack()) {
-                    webView.goBack()
-                } else {
-                    finish()
-                }
-            }
-        })
     }
 
-    private fun setupWebView(videoUrl: String) {
-        webView.settings.javaScriptEnabled = true
-        webView.settings.loadWithOverviewMode = true
-        webView.settings.useWideViewPort = true
-        webView.settings.domStorageEnabled = true
-
-        webView.webViewClient = WebViewClient()
-        webView.webChromeClient = WebChromeClient()
-
-        // Convertir URL de YouTube a formato embebido
-        val embedUrl = convertToEmbedUrl(videoUrl)
-
-        // Cargar video en iframe HTML
-        val html = """
-            <html>
-            <body style="margin:0;padding:0;">
-                <iframe width="100%" height="100%" 
-                    src="$embedUrl" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
-            </body>
-            </html>
-        """.trimIndent()
-
-        webView.loadData(html, "text/html", "utf-8")
+    private fun abrirEnYoutube(url: String) {
+        try {
+            // Intentar abrir en la app de YouTube
+            val videoId = extraerVideoId(url)
+            val intentApp = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoId"))
+            startActivity(intentApp)
+        } catch (e: Exception) {
+            // Si no tiene la app, abrir en navegador
+            val intentBrowser = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intentBrowser)
+        }
     }
 
-    private fun convertToEmbedUrl(url: String): String {
-        // Convertir URL de YouTube normal a formato embed
+    private fun extraerVideoId(url: String): String {
         return when {
             url.contains("youtube.com/watch?v=") -> {
-                val videoId = url.substringAfter("watch?v=").substringBefore("&")
-                "https://www.youtube.com/embed/$videoId"
+                url.substringAfter("watch?v=").substringBefore("&")
             }
             url.contains("youtu.be/") -> {
-                val videoId = url.substringAfter("youtu.be/").substringBefore("?")
-                "https://www.youtube.com/embed/$videoId"
+                url.substringAfter("youtu.be/").substringBefore("?")
             }
-            else -> url // Si ya está en formato embed o es otra URL
+            url.contains("youtube.com/embed/") -> {
+                url.substringAfter("embed/").substringBefore("?")
+            }
+            else -> url
         }
     }
 }

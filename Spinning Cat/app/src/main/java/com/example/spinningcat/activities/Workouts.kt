@@ -46,7 +46,6 @@ class Workouts : AppCompatActivity() {
 
         val userLevelLabel = findViewById<TextView>(R.id.userLevelLabel)
         profileButton = findViewById(R.id.profileButton)
-        trainerButton = findViewById(R.id.btnGoback)
         backButton = findViewById(R.id.btnGoback)
         workoutsRecyclerView = findViewById(R.id.workoutsRecyclerView)
 
@@ -176,7 +175,7 @@ class Workouts : AppCompatActivity() {
             0L
         }
     }
-
+    // Filtrar workouts por nivel, usando la lista completa de workouts y actualizando el adapter
     private fun filtrarPorNivel(nivel: Int) {
         val filtrados = workoutsList.filter { it.nivel == nivel }
         adapter?.actualizarLista(filtrados)

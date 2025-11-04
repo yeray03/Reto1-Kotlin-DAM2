@@ -20,7 +20,6 @@ class WorkoutsAdapter(private var workouts: List<WorkoutHistoryItem>) :
         val tiempoTotal: TextView = view.findViewById(R.id.tiempoTotalText)
         val tiempoPrevisto: TextView = view.findViewById(R.id.tiempoPrevistoText)
         val fecha: TextView = view.findViewById(R.id.fechayHoraText)
-        val porcentaje: TextView = view.findViewById(R.id.ejerciciosTotales)
         val videoButton: Button = view.findViewById(R.id.videoButton)
     }
 
@@ -37,7 +36,6 @@ class WorkoutsAdapter(private var workouts: List<WorkoutHistoryItem>) :
         holder.tiempoTotal.text = "Tiempo total: ${formatearTiempo(item.tiempoTotal)}"
         holder.tiempoPrevisto.text = "Tiempo previsto: ${formatearTiempo(item.tiempoPrevisto)}"
         holder.fecha.text = "Fecha: ${item.fecha}"
-        holder.porcentaje.text = "% Completados: ${item.porcentajeCompletado}"
 
         // Click en el item abre el detalle
         holder.itemView.setOnClickListener {

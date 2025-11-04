@@ -46,22 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/ejerciciosTotales"
-        android:text="@string/ejsTotales"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/porcentajeCompletado"
-        android:text="@string/porcentaje"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <Button
         android:id="@+id/videoButton"
-        android:text="@string/play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="4dp"
+        android:text="@string/play" />
 </LinearLayout>

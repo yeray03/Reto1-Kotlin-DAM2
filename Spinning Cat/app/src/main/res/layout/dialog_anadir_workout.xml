@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Añadir Workout"
+        android:text="@string/anadir_workoutDialog"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nombre:"
+        android:text="@string/nombreWorkout"
         android:textStyle="bold"/>
 
     <EditText
@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nivel:"
+        android:text="@string/nivel"
         android:textStyle="bold"/>
 
     <EditText
@@ -63,7 +63,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ejercicio 1:"
+        android:text="@string/ejercicio_1"
         android:textStyle="bold"/>
 
     <Spinner
@@ -76,7 +76,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ejercicio 2:"
+        android:text="@string/ejercicio_2"
         android:textStyle="bold"/>
 
     <Spinner
@@ -89,7 +89,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ejercicio 3:"
+        android:text="@string/ejercicio_3"
         android:textStyle="bold"/>
 
     <Spinner
@@ -109,14 +109,14 @@
             android:id="@+id/btnCancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar"
+            android:text="@string/cancelar"
             android:layout_marginEnd="8dp"/>
 
         <Button
             android:id="@+id/btnGuardar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crear"/>
+            android:text="@string/crear"/>
     </LinearLayout>
 
 </LinearLayout>

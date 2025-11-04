@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Ejercicios:"
+            android:text="@string/ejercicios"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
@@ -102,9 +102,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvEjercicios"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:nestedScrollingEnabled="false" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:nestedScrollingEnabled="true" />
 
         <!-- Botón Reproducir Video -->
         <Button
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="▶ Reproducir Video del Workout"
+            android:text="@string/reproducir_video_del_workout"
             android:textSize="16sp"/>
 
         <!-- Botón Volver -->

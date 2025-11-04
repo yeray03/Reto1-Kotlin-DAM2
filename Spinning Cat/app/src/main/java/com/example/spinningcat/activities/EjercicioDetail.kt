@@ -86,7 +86,7 @@ class EjercicioDetail : AppCompatActivity() {
 
         loadEjercicios(workoutNombre)
     }
-
+    // Cargar workout desde Firestore, busca el nombre de la colección "workouts" y obtiene el campo "tiempoPrevisto"
     private fun cargarWorkoutDesdeFirebase(workoutNombre: String) {
         db.collection("workouts")
             .whereEqualTo("nombre", workoutNombre)
@@ -102,7 +102,7 @@ class EjercicioDetail : AppCompatActivity() {
                 Toast.makeText(this, "Error al cargar tiempo previsto: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
+    // Cargar ejercicios asociados al workout
     private fun loadEjercicios(workoutNombre: String) {
         db.collection("workouts")
             .whereEqualTo("nombre", workoutNombre)
@@ -116,7 +116,7 @@ class EjercicioDetail : AppCompatActivity() {
                 val workoutDoc = workoutDocs.documents[0]
 
                 // Buscar campo correcto: ejercicios
-                val ejerciciosRefs = workoutDoc.get("ejercicios") as? List<*>
+                val ejerciciosRefs = workoutDoc.get("ejercicios") as? List<*> // Usamos List<*> porque puede contener referencias o IDs
 
                 if (ejerciciosRefs.isNullOrEmpty()) {
                     Toast.makeText(this, "Este workout no tiene ejercicios", Toast.LENGTH_SHORT).show()

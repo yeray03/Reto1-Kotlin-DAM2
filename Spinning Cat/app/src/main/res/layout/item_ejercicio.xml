@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Descripción del ejercicio"
+            android:text="@string/descripcion_del_ejercicio"
             android:textSize="14sp"/>
 
         <TextView

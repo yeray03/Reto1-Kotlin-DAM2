@@ -2,7 +2,6 @@ package com.example.spinningcat.activities
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Switch
@@ -30,6 +28,7 @@ import com.example.spinningcat.MainActivity
 class Profile : AppCompatActivity() {
 
     private var usuario: User? = null
+    private var edit: Boolean = false
     private lateinit var etLogin: EditText
     private lateinit var etNombre: EditText
     private lateinit var etApellidos: EditText
@@ -40,15 +39,13 @@ class Profile : AppCompatActivity() {
     private lateinit var tema: Switch
     private lateinit var spinner: Spinner
     private lateinit var tvNombre: TextView
-    private lateinit var tvLogin: TextView
     private lateinit var ivAvatar: ImageView
-    private lateinit var btnEdit: ImageButton
 
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Configurar tema antes de llamar a super.onCreate usando SharedPreferences
-        sharedPreferences = getSharedPreferences("GymPrefs", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("GymPrefs", MODE_PRIVATE)
         val temaOscuro = sharedPreferences.getBoolean("temaOscuro", false)
         AppCompatDelegate.setDefaultNightMode(
             if (temaOscuro) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
@@ -64,13 +61,11 @@ class Profile : AppCompatActivity() {
         etEmail = findViewById(R.id.etEmail)
         etFechaNacimiento = findViewById(R.id.etFechaNacimiento)
         btnVolver = findViewById(R.id.btnVolver)
-        btnGuardar = findViewById(R.id.btnGuardar)
+        btnGuardar = findViewById(R.id.btnGuardar_Edit)
         tema = findViewById(R.id.switchTema)
         spinner = findViewById(R.id.spinnerIdioma)
         tvNombre = findViewById(R.id.tvNombre)
-        tvLogin = findViewById(R.id.tvLogin)
         ivAvatar = findViewById(R.id.ivAvatar)
-        btnEdit = findViewById(R.id.btnEdit)
 
         // Cargar datos del usuario (ejemplo simulado)
         val extras: Bundle? = intent.extras
@@ -86,15 +81,16 @@ class Profile : AppCompatActivity() {
         }
 
         btnGuardar.setOnClickListener {
-            guardarCambios()
+            if(edit) {
+                guardarCambios()
+            }else{
+                //cambiar a modo edicion
+                habilitarEdicion(true)
+            }
         }
 
         etFechaNacimiento.setOnClickListener {
             mostrarDatePicker()
-        }
-
-        btnEdit.setOnClickListener {
-            habilitarEdicion(true)
         }
 
         val idiomas = listOf(
@@ -102,7 +98,7 @@ class Profile : AppCompatActivity() {
             R.drawable.icono_inglish_pitinglish_foreground
         )
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        val initialPos = if (prefs.getString("lang","") == "es") 0 else 1
+        val initialPos = if (prefs.getString("lang", "") == "es") 0 else 1
         spinner.adapter = SpinnerAdapter(this, idiomas)
         spinner.setSelection(initialPos)
 
@@ -156,16 +152,20 @@ class Profile : AppCompatActivity() {
         etFechaNacimiento.setText(user?.fechaNacimiento)
         tvNombre.text = "${user?.nombre} ${user?.apellidos}"
     }
+
     private fun habilitarEdicion(habilitar: Boolean) {
         etNombre.isEnabled = habilitar
         etApellidos.isEnabled = habilitar
         etEmail.isEnabled = habilitar
         etFechaNacimiento.isEnabled = habilitar
-        btnGuardar.visibility = if (habilitar) View.VISIBLE else View.GONE
+        etFechaNacimiento.isClickable = habilitar
+        btnGuardar.text = getString(R.string.guardar)
+        edit = true
     }
 
     private fun guardarCambios() {
         val user = User(
+            nickname = etLogin.text.toString(),
             nombre = etNombre.text.toString(),
             apellidos = etApellidos.text.toString(),
             email = etEmail.text.toString(),
@@ -175,6 +175,8 @@ class Profile : AppCompatActivity() {
             mostrarUsuario(user)
             habilitarEdicion(false)
             Toast.makeText(this, getString(R.string.perfil_guardado), Toast.LENGTH_SHORT).show()
+            edit = false
+            btnGuardar.text = getString(R.string.edit)
         } else {
             Toast.makeText(this, getString(R.string.error_campos), Toast.LENGTH_SHORT).show()
         }

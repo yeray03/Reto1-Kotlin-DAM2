@@ -41,7 +41,7 @@ class ModificarWorkoutDialog(
         spinnerEjercicio1 = findViewById(R.id.spinnerEjercicio1)
         spinnerEjercicio2 = findViewById(R.id.spinnerEjercicio2)
         spinnerEjercicio3 = findViewById(R.id.spinnerEjercicio3)
-        btnGuardar = findViewById(R.id.btnGuardar)
+        btnGuardar = findViewById(R.id.btnGuardar_Edit)
         btnCancelar = findViewById(R.id.btnCancelar)
 
         // Cargar ejercicios disponibles desde Firebase

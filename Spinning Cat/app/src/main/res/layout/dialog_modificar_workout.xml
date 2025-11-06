@@ -113,7 +113,7 @@
             android:layout_marginEnd="8dp"/>
 
         <Button
-            android:id="@+id/btnGuardar"
+            android:id="@+id/btnGuardar_Edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Guardar"/>

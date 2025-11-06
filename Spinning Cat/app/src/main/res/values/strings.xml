@@ -12,7 +12,7 @@
     <string name="tvNickname">Nickname:</string>
     <string name="tvName">Name:</string>
     <string name="tvSurnames">Surnames:</string>
-    <string name="tvEmail">Email o nickname:</string>
+    <string name="tvEmail">Email:</string>
     <string name="tvPassword">Password:</string>
     <string name="tvConfirmPassword">Confirm Password:</string>
     <string name="tvDate">Birthdate:</string>
@@ -44,7 +44,7 @@
     <string name="goback">Return</string>
     <string name="modify">Modify</string>
     <string name="delete">Delete</string>
-    <string name="apellidos">Apellidos</string>
+    <string name="apellidos">Surname</string>
     <string name="fecha_nacimiento">Birthdate</string>
     <string name="cambiar_tema">Change theme mode</string>
     <string name="guardar">Save</string>
@@ -65,7 +65,7 @@
     <string name="play">Play</string>
     <string name="completed_100">% Finished: 100</string>
     <string name="ver_workouts">See all Workouts</string>
-    <string name="trainee">trainee</string>
+    <string name="trainee">Trainee</string>
     <string name="ejsTotales">Exercises</string>
     <string name="porcentaje">Finished percentage</string>
     <string name="entrenador">Trainer</string>
@@ -75,13 +75,12 @@
     <string name="el_video_se_abrir_en_youtube">The video is being opened in Youtube</string>
     <string name="anadir_workout">Add Workout</string>
     <string name="ver_ejercicios">View exercises</string>
-    <string name="eliminar">Eliminar</string>
     <string name="ver_video_en_youtube">Watch video in YouTube</string>
     <string name="reproducir_video_del_workout">▶ Play video of the Workout</string>
     <string name="volverVideo">Return</string>
     <string name="ejercicios">Exercises:</string>
     <string name="anadir_workoutDialog">Add Workout</string>
-    <string name="nombreWorkout">Name:</string>
+    <string name="nombreWorkout">Workout Name:</string>
     <string name="nivel">Level:</string>
     <string name="ejercicio_1">Exercise 1:</string>
     <string name="ejercicio_2">Exercise 2:</string>
@@ -89,6 +88,11 @@
     <string name="cancelar">Cancel</string>
     <string name="crear">Create</string>
     <string name="descripcion_del_ejercicio">Description of the exercise</string>
-
+    <string name="tvType">User type:</string>
+    <string name="edit">Edit</string>
+    <string name="nombreEjercicio">Exercise name</string>
+    <string name="series">Sets:</string>
+    <string name="nombreApellido">Name and Surname</string>
+    <string name="user_level_label">User level: %d</string>
 
 </resources>

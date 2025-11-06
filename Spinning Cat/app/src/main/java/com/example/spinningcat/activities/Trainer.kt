@@ -1,7 +1,6 @@
 package com.example.spinningcat.activities
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -31,7 +30,6 @@ class Trainer : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trainer)
-        val db = FirebaseFirestore.getInstance()
 
         // Referencias a vistas
         val recyclerWorkouts = findViewById<RecyclerView>(R.id.recyclerWorkouts)
@@ -86,7 +84,12 @@ class Trainer : AppCompatActivity() {
 
         // Listener del spinner para filtrar por nivel
         spinnerNivel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val seleccion = niveles[position]
 
                 if (seleccion == "Todos") {
@@ -139,15 +142,17 @@ class Trainer : AppCompatActivity() {
                     }
                 }
 
-                val workout = Workout(
-                    id = id,
-                    nombre = nombre,
-                    nivel = nivel,
-                    ejercicios = ejerciciosDocumentRefs,
-                    numEjercicio = numEjercicio,
-                    videoUrl = videoUrl
-                )
-                workouts.add(workout)
+                if (nivel <= usuario.nivel) {
+                    val workout = Workout(
+                        id = id,
+                        nombre = nombre,
+                        nivel = nivel,
+                        ejercicios = ejerciciosDocumentRefs,
+                        numEjercicio = numEjercicio,
+                        videoUrl = videoUrl
+                    )
+                    workouts.add(workout)
+                }
             }
 
             // Actualizar la lista filtrada con todos los workouts inicialmente
@@ -171,21 +176,6 @@ class Trainer : AppCompatActivity() {
         }
     }
 
-    // Guardar un nuevo workout en Firestore
-    private fun guardarWorkoutEnFirestore(workout: Workout) {
-        val db = FirebaseFirestore.getInstance()
-        val docRef = db.collection("workouts").document()
-        workout.id = docRef.id
-        docRef.set(workout)
-            .addOnSuccessListener {
-                cargarWorkouts()
-                Toast.makeText(this, "Workout añadido", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Error al añadir workout", Toast.LENGTH_SHORT).show()
-            }
-    }
-
     // Modificar un workout
     private fun modificarWorkout(workout: Workout) {
         val dialog = ModificarWorkoutDialog(this, workout) { workoutModificado ->
@@ -197,7 +187,7 @@ class Trainer : AppCompatActivity() {
     // Eliminar un workout
     private fun eliminarWorkout(workout: Workout) {
         val db = FirebaseFirestore.getInstance()
-        if (workout.id.isNullOrEmpty()) {
+        if (workout.id.isEmpty()) {
             Toast.makeText(this, "Error: ID de workout no válido", Toast.LENGTH_SHORT).show()
             return
         }
@@ -211,9 +201,4 @@ class Trainer : AppCompatActivity() {
             }
     }
 
-    // Reproducir video
-    private fun reproducirVideo(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
-    }
 }

@@ -14,8 +14,6 @@ import com.example.spinningcat.room.entities.WorkoutHistoryItem
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Workouts : AppCompatActivity() {
-    private var filterEditText: EditText? = null
-    private var profileButton: Button? = null
     private var trainerButton: Button? = null
     private var backButton: Button? = null
     private var workoutsRecyclerView: RecyclerView? = null
@@ -31,6 +29,7 @@ class Workouts : AppCompatActivity() {
         setContentView(R.layout.activity_workouts)
 
         val extras = intent.extras
+        @Suppress("DEPRECATION")
         usuario = extras?.getSerializable("usuario") as? User
 
         nickname = usuario?.nickname ?: intent.getStringExtra("nickname") ?: ""
@@ -45,11 +44,11 @@ class Workouts : AppCompatActivity() {
         spinnerNivel.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, niveles)
 
         val userLevelLabel = findViewById<TextView>(R.id.userLevelLabel)
-        profileButton = findViewById(R.id.profileButton)
+        val profile = findViewById<ImageView>(R.id.imgPerfil)
         backButton = findViewById(R.id.btnGoback)
         workoutsRecyclerView = findViewById(R.id.workoutsRecyclerView)
 
-        userLevelLabel.text = "Nivel del usuario: $userLevel"
+        userLevelLabel.text = getString(R.string.user_level_label, userLevel)
         trainerButton?.visibility = if (isTrainer) View.VISIBLE else View.GONE
 
         adapter = WorkoutsAdapter(workoutsList)
@@ -70,7 +69,7 @@ class Workouts : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        profileButton?.setOnClickListener {
+        profile?.setOnClickListener {
             val intent = Intent (this, Profile::class.java)
             intent.putExtra("usuario", usuario)
             startActivity(intent)
@@ -133,51 +132,9 @@ class Workouts : AppCompatActivity() {
             }
     }
 
-    private fun obtenerTiempoPrevistoDeWorkout(workoutNombre: String, callback: (Long) -> Unit) {
-        val dbFirestore = FirebaseFirestore.getInstance()
-        dbFirestore.collection("workouts")
-            .whereEqualTo("nombre", workoutNombre)
-            .get()
-            .addOnSuccessListener { result ->
-                if (!result.isEmpty) {
-                    val doc = result.documents[0]
-                    val tiempoPrevistoStr = doc.getString("tiempoPrevisto") ?: ""
-                    callback(parseTiempoASegundos(tiempoPrevistoStr))
-                } else {
-                    callback(0L)
-                }
-            }
-            .addOnFailureListener {
-                callback(0L)
-            }
-    }
-
-    private fun parseTiempoASegundos(tiempo: String): Long {
-        if (tiempo.isEmpty()) return 0L
-
-        return try {
-            val parts = tiempo.split(":")
-            when (parts.size) {
-                3 -> {
-                    val hours = parts[0].toLongOrNull() ?: 0L
-                    val minutes = parts[1].toLongOrNull() ?: 0L
-                    val seconds = parts[2].toLongOrNull() ?: 0L
-                    hours * 3600 + minutes * 60 + seconds
-                }
-                2 -> {
-                    val minutes = parts[0].toLongOrNull() ?: 0L
-                    val seconds = parts[1].toLongOrNull() ?: 0L
-                    minutes * 60 + seconds
-                }
-                else -> 0L
-            }
-        } catch (e: Exception) {
-            0L
-        }
-    }
     // Filtrar workouts por nivel, usando la lista completa de workouts y actualizando el adapter
     private fun filtrarPorNivel(nivel: Int) {
         val filtrados = workoutsList.filter { it.nivel == nivel }
-        adapter?.actualizarLista(filtrados)
+        adapter.actualizarLista(filtrados)
     }
 }

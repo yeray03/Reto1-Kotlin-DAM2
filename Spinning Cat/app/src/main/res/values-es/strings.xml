@@ -12,7 +12,7 @@
     <string name="tvNickname">Nombre de usuario:</string>
     <string name="tvName">Nombre:</string>
     <string name="tvSurnames">Apellidos:</string>
-    <string name="tvEmail">Correo electrónico o nickname:</string>
+    <string name="tvEmail">Correo electrónico:</string>
     <string name="tvPassword">Contraseña:</string>
     <string name="tvConfirmPassword">Confirmar contraseña:</string>
     <string name="tvDate">Fecha de nacimiento:</string>
@@ -43,7 +43,7 @@
     <string name="filter_by_level">Filtrar por nivel</string>
     <string name="goback">Volver</string>
     <string name="modify">modificar</string>
-    <string name="apellidos">Apellidos</string>
+    <string name="apellidos">Apellido</string>
     <string name="fecha_nacimiento">Fecha de nacimiento</string>
     <string name="cambiar_tema">Cambiar tema</string>
     <string name="guardar">Guardar</string>
@@ -65,7 +65,7 @@
     <string name="play">Reproducir</string>
     <string name="completed_100">% Completados: 100</string>
     <string name="ver_workouts">Ver Workouts</string>
-    <string name="trainee">trainee</string>
+    <string name="trainee">Usuario</string>
     <string name="ejsTotales">Ejercicios totales</string>
     <string name="porcentaje">Porcentaje completado</string>
     <string name="entrenador">Entrenador</string>
@@ -75,13 +75,12 @@
     <string name="el_video_se_abrir_en_youtube">El video se abrirá en YouTube</string>
     <string name="anadir_workout">Añadir Workout</string>
     <string name="ver_ejercicios">Ver Ejercicios</string>
-    <string name="eliminar">Eliminar</string>
     <string name="ver_video_en_youtube">Ver Video en YouTube</string>
     <string name="reproducir_video_del_workout">▶ Reproducir Video del Workout</string>
     <string name="volverVideo">Volver</string>
     <string name="ejercicios">Ejercicios:</string>
     <string name="anadir_workoutDialog">Añadir Workout</string>
-    <string name="nombreWorkout">Nombre:</string>
+    <string name="nombreWorkout">Nombre del Workout:</string>
     <string name="nivel">Level:</string>
     <string name="ejercicio_1">Ejercicio 1:</string>
     <string name="ejercicio_2">Ejercicio 2:</string>
@@ -89,4 +88,10 @@
     <string name="cancelar">Cancelar</string>
     <string name="crear">Crear</string>
     <string name="descripcion_del_ejercicio">Descripción del ejercicio</string>
+    <string name="tvType">Tipo de usuario:</string>
+    <string name="edit">Editar</string>
+    <string name="nombreEjercicio">Nombre del Ejercicio</string>
+    <string name="series">Series:</string>
+    <string name="nombreApellido">Nombre y Apellido</string>
+    <string name="user_level_label">Nivel del usuario: %d</string>
 </resources>

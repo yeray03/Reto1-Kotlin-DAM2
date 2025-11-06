@@ -8,60 +8,67 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/anadir_workoutDialog"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:layout_marginBottom="16dp"/>
+        android:text="@string/anadir_workoutDialog"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <!-- Nombre -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/nombreWorkout"
-        android:textStyle="bold"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textSize="24sp" />
 
     <!-- Nivel -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/nivel"
-        android:textStyle="bold"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etNivel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:inputType="number" />
+        android:inputType="number"
+        android:textSize="24sp" />
 
     <!-- Video URL -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Video URL:"
-        android:textStyle="bold"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etVideoUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:inputType="textUri" />
+        android:inputType="textUri"
+        android:textSize="24sp" />
 
     <!-- Ejercicio 1 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/ejercicio_1"
-        android:textStyle="bold"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <Spinner
         android:id="@+id/spinnerEjercicio1"
@@ -74,7 +81,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/ejercicio_2"
-        android:textStyle="bold"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <Spinner
         android:id="@+id/spinnerEjercicio2"
@@ -87,7 +95,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/ejercicio_3"
-        android:textStyle="bold"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <Spinner
         android:id="@+id/spinnerEjercicio3"
@@ -106,14 +115,16 @@
             android:id="@+id/btnCancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="@string/cancelar"
-            android:layout_marginEnd="8dp"/>
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/btnGuardar_Edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/crear"/>
+            android:text="@string/crear"
+            android:textSize="24sp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -5,8 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -99,10 +98,11 @@ class Register : AppCompatActivity() {
         }
         val email = findViewById<TextView>(R.id.txtMail).text.toString()
         val fechaNac = findViewById<TextView>(R.id.txtDate).text.toString()
-        val opcionMarcada = findViewById<RadioGroup>(R.id.Rgroup).checkedRadioButtonId
+
+
         // Validar que todos los campos estén completos
         if (nombre.isBlank() || apellidos.isBlank() ||
-            contrasena.isBlank() || contrasena2.isBlank() || email.isBlank() || fechaNac.isBlank() || opcionMarcada == -1
+            contrasena.isBlank() || contrasena2.isBlank() || email.isBlank() || fechaNac.isBlank() || nickname.isBlank()
         ) {
             Toast.makeText(
                 applicationContext,
@@ -112,13 +112,12 @@ class Register : AppCompatActivity() {
             return
         }
 
-        val radioUsuario = findViewById<RadioButton>(opcionMarcada).text.toString()
-        var tipousuario: Int
-        if (radioUsuario == "Trainee" || radioUsuario == "Cliente") { // hardcodeado porque con strings.xml solo pilla el idioma del sistema y no valida los dos idiomas
-            tipousuario = 0
-        } else {
-            tipousuario = 1
-        }
+//        val radioUsuario = findViewById<RadioButton>(opcionMarcada).text.toString()
+//        var tipousuario: Int
+        val spinner = findViewById<Spinner>(R.id.spinnerTipoUser)
+        val tipousuario = spinner.selectedItemPosition
+
+
         val nivel = 0
 
         // Objeto UserAdapter con los datos del nuevo usuario

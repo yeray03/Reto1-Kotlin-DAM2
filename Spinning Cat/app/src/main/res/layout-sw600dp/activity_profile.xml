@@ -9,7 +9,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bgColor">
+        android:background="@color/bgColor"
+        tools:layout_editor_absoluteX="-64dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,8 +27,8 @@
 
                 <ImageView
                     android:id="@+id/ivAvatar"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="281dp"
+                    android:layout_height="352dp"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/gatetepesas"
                     android:src="@drawable/gatetepesas" />
@@ -41,77 +43,80 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:text="@string/nombreApellido"
-                android:textAppearance="?attr/textAppearanceHeadline6" />
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="48sp" />
 
             <!-- Inputs de edición -->
             <EditText
                 android:id="@+id/etLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login" />
+                android:hint="@string/login"
+                android:textSize="34sp" />
 
             <EditText
                 android:id="@+id/etNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/name" />
+                android:hint="@string/name"
+                android:textSize="34sp" />
 
             <EditText
                 android:id="@+id/etApellidos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/apellidos" />
+                android:hint="@string/apellidos"
+                android:textSize="34sp" />
 
             <EditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/email" />
+                android:hint="@string/email"
+                android:textSize="34sp" />
 
             <EditText
                 android:id="@+id/etFechaNacimiento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:enabled="false"
-                android:hint="@string/fecha_nacimiento" />
+                android:hint="@string/fecha_nacimiento"
+                android:textSize="34sp" />
 
             <!-- Cambios de tema e idioma -->
             <Switch
                 android:id="@+id/switchTema"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cambiar_tema" />
+                android:text="@string/cambiar_tema"
+                android:textSize="34sp" />
 
             <!-- Botones -->
 
             <Spinner
                 android:id="@+id/spinnerIdioma"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="183dp"
+                android:layout_height="98dp" />
 
             <Button
                 android:id="@+id/btnGuardar_Edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/edit" />
+                android:text="@string/guardar"
+                android:textSize="34sp" />
 
             <Button
                 android:id="@+id/btnVolver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/volver" />
+                android:text="@string/volver"
+                android:textSize="34sp" />
 
             <Button
                 android:id="@+id/btnCerrarSesion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/logout" />
-
+                android:text="@string/logout"
+                android:textSize="34sp" />
         </LinearLayout>
     </ScrollView>
 
